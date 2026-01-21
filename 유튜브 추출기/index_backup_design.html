@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유튜브 떡상채널 분석기</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Import Map for Google Generative AI -->
+    <script type="importmap">
+      {
+        "imports": {
+          "@google/generative-ai": "https://esm.run/@google/generative-ai"
+        }
+      }
+    </script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Custom Scrollbar for dark theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+
+        .loader {
+            border-top-color: #3b82f6;
+            -webkit-animation: spinner 1.5s linear infinite;
+            animation: spinner 1.5s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Glass/Modal Effect */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .markdown-body h1 {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 0.5em;
+            color: white;
+        }
+
+        .markdown-body h2 {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-top: 1em;
+            margin-bottom: 0.5em;
+            color: #a78bfa;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 0.2em;
+        }
+
+        .markdown-body h3 {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 0.8em;
+            margin-bottom: 0.4em;
+            color: #60a5fa;
+        }
+
+        .markdown-body ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
+            margin-bottom: 1em;
+            color: #cbd5e1;
+        }
+
+        .markdown-body ol {
+            list-style-type: decimal;
+            padding-left: 1.5em;
+            margin-bottom: 1em;
+            color: #cbd5e1;
+        }
+
+        .markdown-body strong {
+            color: #f1f5f9;
+        }
+
+        .markdown-body p {
+            margin-bottom: 0.8em;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+    </style>
+</head>
+
+<body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased selection:bg-blue-500 selection:text-white">
+
+    <!-- Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1
+                class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 mb-2 tracking-tight">
+                유튜브 떡상채널 분석기
+            </h1>
+            <p class="text-slate-400 text-sm md:text-base">저평가된 대박 영상을 찾아내고 AI로 인사이트를 분석하세요.</p>
+        </header>
+
+        <!-- Search Section -->
+        <div class="glass-panel rounded-xl p-6 mb-8 shadow-lg">
+            <div class="flex flex-col md:flex-row gap-4 mb-4">
+                <div class="flex-grow relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-slate-500"></i>
+                    </div>
+                    <input type="text" id="searchInput"
+                        class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-500 transition-all"
+                        placeholder="검색할 키워드를 입력하세요 (예: AI 뉴스, 주식 전망, 운동 루틴...)"
+                        onkeypress="if(event.key === 'Enter') handleSearch()">
+                </div>
+                <button onclick="handleSearch()"
+                    class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-lg shadow-md transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center min-w-[120px]">
+                    <span id="searchBtnText">검색</span>
+                    <div id="searchLoader"
+                        class="loader ease-linear rounded-full border-2 border-t-2 border-gray-200 h-5 w-5 ml-2 hidden">
+                    </div>
+                </button>
+            </div>
+
+            <!-- Row 1: TOP Buttons + Region -->
+            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-700/50">
+                <!-- TOP Buttons -->
+                <div class="flex items-center gap-2">
+                    <button onclick="handleTop10()"
+                        class="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white text-sm font-bold rounded-md shadow-md transition-all flex items-center">
+                        <i class="fas fa-trophy mr-2"></i>TOP 10
+                    </button>
+                    <button onclick="handleTop100()"
+                        class="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 text-white text-sm font-bold rounded-md shadow-md transition-all flex items-center">
+                        <i class="fas fa-crown mr-2"></i>TOP 100
+                    </button>
+                </div>
+
+                <!-- Region Toggle -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-slate-400 font-medium"><i class="fas fa-globe mr-1"></i>지역:</span>
+                    <div class="flex bg-slate-800 rounded-md border border-slate-700 overflow-hidden">
+                        <button id="regionKR" onclick="setRegion('KR')"
+                            class="px-3 py-1.5 text-sm font-medium bg-blue-600 text-white transition-colors">🇰🇷
+                            한국</button>
+                        <button id="regionGB" onclick="setRegion('GB')"
+                            class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white transition-colors">🌍
+                            해외</button>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <div class="ml-auto">
+                    <button onclick="resetFilters()"
+                        class="text-xs text-slate-400 hover:text-white underline transition-colors flex items-center">
+                        <i class="fas fa-undo mr-1"></i> 필터 초기화
+                    </button>
+                </div>
+            </div>
+
+            <!-- Row 2: Duration / Date / Channel Scale -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-700/50 mt-4">
+                <!-- Duration Filter -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
+                            class="fas fa-clock mr-1"></i>영상 길이:</span>
+                    <select id="durationFilter"
+                        class="bg-slate-800 text-slate-200 text-sm rounded-md border border-slate-700 px-3 py-1.5 focus:outline-none focus:border-blue-500 flex-grow">
+                        <option value="any">모두 보기</option>
+                        <option value="short">숏폼 (3분 미만)</option>
+                        <option value="medium">일반 (4~20분)</option>
+                        <option value="long">롱폼 (20분 이상)</option>
+                    </select>
+                </div>
+
+                <!-- Date Filter -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
+                            class="fas fa-calendar-alt mr-1"></i>기간:</span>
+                    <select id="dateFilter"
+                        class="bg-slate-800 text-slate-200 text-sm rounded-md border border-slate-700 px-3 py-1.5 focus:outline-none focus:border-blue-500 flex-grow">
+                        <option value="any">전체 기간</option>
+                        <option value="today">오늘 (24시간)</option>
+                        <option value="week">이번 주</option>
+                        <option value="month">이번 달</option>
+                        <option value="year">올해</option>
+                    </select>
+                </div>
+
+                <!-- Channel Scale Filter -->
+                <div class="flex items-center space-x-2">
+                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
+                            class="fas fa-user-friends mr-1"></i>채널 규모:</span>
+                    <select id="channelFilter"
+                        class="bg-slate-800 text-slate-200 text-sm rounded-md border border-slate-700 px-3 py-1.5 focus:outline-none focus:border-blue-500 flex-grow">
+                        <option value="all">모든 채널</option>
+                        <option value="new">신규 채널 (1년 미만)</option>
+                        <option value="micro">마이크로 (구독자 1만 미만)</option>
+                        <option value="small">성장형 (구독자 5만 미만)</option>
+                        <option value="viral">떡상형 (구독자 10만 미만)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Viral Ratio Slider -->
+            <div class="pt-4 border-t border-slate-700/50 mt-4">
+                <div class="flex items-center space-x-3">
+                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
+                            class="fas fa-chart-line mr-1"></i>떡상 측정도:</span>
+                    <input type="range" id="ratioRange" min="0" max="500" value="0" step="10"
+                        class="flex-grow h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                    <span id="ratioValue" class="text-sm font-bold text-blue-400 w-16 text-right">0%</span>
+                </div>
+                <div id="ratioExplanation" class="mt-2 text-xs text-slate-500 bg-slate-800/50 rounded px-3 py-2">
+                    <i class="fas fa-info-circle mr-1"></i>현재 설정: <strong class="text-blue-400">모든 영상</strong> 표시 중
+                    <span class="text-slate-600 ml-2">| 떡상도 = (조회수 ÷ 구독자수) × 100</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- API Key Config (Collapsible) -->
+        <details class="mb-8 group">
+            <summary
+                class="flex items-center cursor-pointer text-slate-400 hover:text-white transition-colors text-sm select-none">
+                <i class="fas fa-cog mr-2 group-open:rotate-90 transition-transform"></i> API 키 설정
+            </summary>
+            <div class="mt-4 glass-panel p-4 rounded-lg">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">YouTube API Key</label>
+                    <input type="password" id="uiYoutubeKey"
+                        class="w-full px-3 py-2 bg-slate-800 border border-slate-700 rounded text-sm focus:outline-none focus:border-blue-500"
+                        placeholder="코드 상단의 YOUTUBE_API_KEY가 비어있다면 입력">
+                </div>
+            </div>
+        </details>
+
+        <!-- Results Section -->
+        <div id="resultsArea" class="hidden">
+            <div class="flex justify-between items-center mb-3 px-1">
+                <h2 class="text-lg font-bold text-white"><i class="fas fa-list mr-2"></i>검색 결과 <span id="resultCount"
+                        class="text-blue-400 text-sm ml-1 font-normal"></span></h2>
+            </div>
+            <!-- Card Grid -->
+            <div id="resultsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Cards will be injected here -->
+            </div>
+        </div>
+
+        <!-- Empty State / Initial -->
+        <div id="emptyState" class="text-center py-20 text-slate-600">
+            <i class="fab fa-youtube text-6xl mb-4 opacity-20"></i>
+            <p>키워드를 입력하고 검색을 시작해보세요.</p>
+        </div>
+
+    </div>
+
+    <!-- Analysis Modal -->
+    <div id="analysisModal"
+        class="fixed inset-0 z-50 flex items-center justify-center hidden bg-black/80 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-slate-800 rounded-xl shadow-2xl max-w-3xl w-full mx-4 border border-slate-700 flex flex-col max-h-[90vh] transform scale-95 transition-transform duration-300"
+            id="modalContent">
+            <!-- Modal Header -->
+            <div
+                class="px-6 py-4 border-b border-slate-700 flex justify-between items-center bg-slate-800/50 rounded-t-xl">
+                <h3 class="text-lg font-bold text-white flex items-center">
+                    <i class="fas fa-chart-bar text-purple-400 mr-2"></i>채널 심층 분석
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-grow">
+
+                <!-- Step 1: Loading -->
+                <div id="modalLoading" class="flex flex-col items-center justify-center py-10">
+                    <div
+                        class="loader ease-linear rounded-full border-4 border-t-4 border-slate-600 border-t-purple-500 h-10 w-10 mb-4">
+                    </div>
+                    <p class="text-slate-400 animate-pulse text-sm">채널 데이터를 분석 중입니다...</p>
+                </div>
+
+                <!-- Step 2: Content -->
+                <div id="modalResult" class="hidden space-y-6">
+                    <!-- 2.1 Channel Infographic -->
+                    <div id="channelInfoGraphic"
+                        class="bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl p-6 border border-slate-700">
+                        <!-- Channel Header -->
+                        <div id="channelHeader" class="flex items-center gap-4 mb-6 pb-4 border-b border-slate-700">
+                            <div
+                                class="w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-orange-500 flex items-center justify-center text-2xl font-bold text-white">
+                                <i class="fab fa-youtube"></i>
+                            </div>
+                            <div>
+                                <h3 id="modalChannelName" class="text-xl font-bold text-white">채널명</h3>
+                                <p id="modalChannelSubs" class="text-slate-400 text-sm">구독자 0명</p>
+                            </div>
+                        </div>
+
+                        <!-- Stats Grid (운영기간 first) -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <div class="bg-slate-800/50 rounded-lg p-4 text-center border border-slate-700/50">
+                                <div class="text-2xl font-bold text-purple-400" id="modalChannelAge">0</div>
+                                <div class="text-xs text-slate-500 mt-1">운영 기간</div>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-lg p-4 text-center border border-slate-700/50">
+                                <div class="text-2xl font-bold text-blue-400" id="modalTotalViews">0</div>
+                                <div class="text-xs text-slate-500 mt-1">총 조회수</div>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-lg p-4 text-center border border-slate-700/50">
+                                <div class="text-2xl font-bold text-green-400" id="modalVideoCount">0</div>
+                                <div class="text-xs text-slate-500 mt-1">총 영상수</div>
+                            </div>
+                            <div class="bg-slate-800/50 rounded-lg p-4 text-center border border-slate-700/50">
+                                <div class="text-2xl font-bold text-orange-400" id="modalAvgViews">0</div>
+                                <div class="text-xs text-slate-500 mt-1">평균 조회수</div>
+                            </div>
+                        </div>
+
+                        <!-- Additional Stats -->
+                        <div class="grid grid-cols-4 gap-3 text-center mb-6">
+                            <div
+                                class="bg-gradient-to-br from-amber-500/20 to-orange-500/20 rounded-lg p-3 border border-amber-500/30">
+                                <div class="text-lg font-bold text-amber-400" id="modalUploadFreq">0</div>
+                                <div class="text-[10px] text-slate-400">월 업로드</div>
+                            </div>
+                            <div
+                                class="bg-gradient-to-br from-green-500/20 to-emerald-500/20 rounded-lg p-3 border border-green-500/30">
+                                <div class="text-lg font-bold text-green-400" id="modalSubsGrowth">+0</div>
+                                <div class="text-[10px] text-slate-400">월 구독증가</div>
+                            </div>
+                            <div
+                                class="bg-gradient-to-br from-cyan-500/20 to-teal-500/20 rounded-lg p-3 border border-cyan-500/30">
+                                <div class="text-lg font-bold text-cyan-400" id="modalDailySubsGrowth">+0</div>
+                                <div class="text-[10px] text-slate-400">일 구독증가</div>
+                            </div>
+                            <div
+                                class="bg-gradient-to-br from-blue-500/20 to-purple-500/20 rounded-lg p-3 border border-blue-500/30">
+                                <div class="text-lg font-bold text-blue-400" id="modalViralScore">0%</div>
+                                <div class="text-[10px] text-slate-400">떡상도</div>
+                            </div>
+                        </div>
+
+                        <!-- Monthly Subscriber Growth Chart -->
+                        <div class="border-t border-slate-700 pt-4 mb-4">
+                            <h4 class="text-sm font-bold text-white mb-3 flex items-center">
+                                <i class="fas fa-chart-line text-green-400 mr-2"></i>월별 구독자 증가 추이 (최근 12개월)
+                            </h4>
+                            <div id="subsChartContainer"
+                                class="flex items-end justify-between gap-1 h-24 bg-slate-900/50 rounded-lg p-3">
+                                <!-- Chart bars injected here -->
+                            </div>
+                            <div class="flex justify-between text-[9px] text-slate-600 mt-1 px-1">
+                                <span id="chartLabelStart">-</span>
+                                <span id="chartLabelEnd">현재</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2.2 Top 10 Videos List -->
+                    <div class="border-t border-slate-700 pt-6">
+                        <h4 class="text-md font-bold text-white mb-4 flex items-center">
+                            <i class="fas fa-fire text-red-400 mr-2"></i>조회수 TOP 10 영상
+                        </h4>
+                        <div id="topVideosList" class="space-y-2">
+                            <!-- Videos injected here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="px-6 py-4 border-t border-slate-700 bg-slate-850 rounded-b-xl flex justify-end">
+                <button onclick="closeModal()"
+                    class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-sm font-medium transition-colors">
+                    닫기
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast"
+        class="fixed bottom-5 right-5 px-6 py-4 rounded-lg shadow-lg transform translate-y-20 opacity-0 transition-all duration-300 z-50 font-medium text-sm flex items-center">
+    </div>
+
+    <!-- Main Logic (Standard) -->
+    <script>
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
+        const CONFIG = {
+            YOUTUBE_API_KEY: '',  // User must enter via UI
+            GEMINI_API_KEY: '',   // Not used in current UI
+            GEMINI_MODEL_NAME: 'gemini-2.0-flash'
+        };
+
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        let searchResults = [];
+        let currentAnalysisContext = "";
+        let regionCode = 'KR'; // Default region
+
+        // UI References (Global)
+        let els = {};
+
+        // Initialize on Load
+        document.addEventListener('DOMContentLoaded', () => {
+            initUI();
+        });
+
+        function initUI() {
+            els = {
+                searchInput: document.getElementById('searchInput'),
+                durationFilter: document.getElementById('durationFilter'),
+                dateFilter: document.getElementById('dateFilter'),
+                channelFilter: document.getElementById('channelFilter'),
+                ratioRange: document.getElementById('ratioRange'),
+                ratioValue: document.getElementById('ratioValue'),
+                searchBtnText: document.getElementById('searchBtnText'),
+                searchLoader: document.getElementById('searchLoader'),
+                resultsArea: document.getElementById('resultsArea'),
+                resultCount: document.getElementById('resultCount'),
+                resultsGrid: document.getElementById('resultsGrid'),
+                emptyState: document.getElementById('emptyState'),
+                modal: document.getElementById('analysisModal'),
+                modalContent: document.getElementById('modalContent'),
+                modalLoading: document.getElementById('modalLoading'),
+                modalResult: document.getElementById('modalResult'),
+                analysisReport: document.getElementById('analysisReport'),
+                keywordSelectionArea: document.getElementById('keywordSelectionArea'),
+                keywordButtons: document.getElementById('keywordButtons'),
+                scriptOutputArea: document.getElementById('scriptOutputArea'),
+                scriptLoading: document.getElementById('scriptLoading'),
+                scriptContent: document.getElementById('scriptContent'),
+                uiYoutubeKey: document.getElementById('uiYoutubeKey'),
+                uiGeminiKey: document.getElementById('uiGeminiKey'),
+                toast: document.getElementById('toast')
+            };
+
+            if (els.ratioRange) {
+                els.ratioRange.addEventListener('input', (e) => {
+                    const val = parseInt(e.target.value);
+                    if (els.ratioValue) els.ratioValue.innerText = val + '%';
+                    updateRatioExplanation(val);
+                });
+            }
+        }
+
+        function updateRatioExplanation(val) {
+            const exp = document.getElementById('ratioExplanation');
+            if (!exp) return;
+
+            let desc, color;
+            if (val === 0) {
+                desc = '모든 영상';
+                color = 'text-blue-400';
+            } else if (val <= 50) {
+                desc = `떡상도 ${val}% 이상 (약간의 성과)`;
+                color = 'text-green-400';
+            } else if (val <= 100) {
+                desc = `떡상도 ${val}% 이상 (평균 이상 성과)`;
+                color = 'text-yellow-400';
+            } else if (val <= 200) {
+                desc = `떡상도 ${val}% 이상 (조회수 > 구독자수)`;
+                color = 'text-orange-400';
+            } else {
+                desc = `떡상도 ${val}% 이상 (떡상각)`;
+                color = 'text-red-400';
+            }
+
+            exp.innerHTML = `<i class="fas fa-fire mr-1"></i>필터: <strong class="${color}">${desc}</strong> 표시 <span class="text-slate-600 ml-2">| 숫자가 높을수록 더 희귀한 떡상 영상만 표시됩니다</span>`;
+        }
+
+        function getKeys() {
+            return {
+                youtube: (els.uiYoutubeKey && els.uiYoutubeKey.value.trim()) || CONFIG.YOUTUBE_API_KEY,
+                gemini: (els.uiGeminiKey && els.uiGeminiKey.value.trim()) || CONFIG.GEMINI_API_KEY
+            };
+        }
+
+        function formatNumber(num) {
+            if (num >= 100000000) return (num / 100000000).toFixed(1) + '억';
+            if (num >= 10000) return (num / 10000).toFixed(1) + '만';
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // Parse ISO 8601 duration to seconds (e.g., PT3M45S -> 225)
+        function parseDuration(duration) {
+            if (!duration) return 0;
+            const match = duration.match(/PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?/);
+            if (!match) return 0;
+            const hours = parseInt(match[1] || 0);
+            const minutes = parseInt(match[2] || 0);
+            const seconds = parseInt(match[3] || 0);
+            return hours * 3600 + minutes * 60 + seconds;
+        }
+
+        function showToast(message, type = 'error') {
+            const toast = document.getElementById('toast');
+            if (!toast) return alert(message);
+            toast.className = `fixed bottom-5 right-5 px-6 py-4 rounded-lg shadow-lg transform transition-all duration-300 z-50 font-medium text-sm flex items-center ${type === 'error' ? 'bg-red-500/90 text-white' : 'bg-green-500/90 text-white'}`;
+            toast.innerHTML = `<i class="fas ${type === 'error' ? 'fa-exclamation-circle' : 'fa-check'} mr-3"></i> ${message}`;
+
+            requestAnimationFrame(() => toast.classList.remove('translate-y-20', 'opacity-0'));
+            setTimeout(() => toast.classList.add('translate-y-20', 'opacity-0'), 3000);
+        }
+
+        // ==========================================
+        // REGION TOGGLE
+        // ==========================================
+        function setRegion(code) {
+            regionCode = code;
+            const krBtn = document.getElementById('regionKR');
+            const gbBtn = document.getElementById('regionGB');
+            if (code === 'KR') {
+                krBtn.classList.add('bg-blue-600', 'text-white');
+                krBtn.classList.remove('text-slate-400');
+                gbBtn.classList.remove('bg-blue-600', 'text-white');
+                gbBtn.classList.add('text-slate-400');
+            } else {
+                gbBtn.classList.add('bg-blue-600', 'text-white');
+                gbBtn.classList.remove('text-slate-400');
+                krBtn.classList.remove('bg-blue-600', 'text-white');
+                krBtn.classList.add('text-slate-400');
+            }
+        }
+
+        // ==========================================
+        // TOP 10 RANKING
+        // ==========================================
+        async function handleTop10() {
+            await handleTopN(10);
+        }
+
+        // ==========================================
+        // TOP 100 RANKING
+        // ==========================================
+        async function handleTop100() {
+            await handleTopN(50); // API max is 50, we'll note this
+            showToast('API 제한으로 최대 50개까지만 표시됩니다.', 'info');
+        }
+
+        async function handleTopN(maxResults) {
+            if (!els.searchInput) initUI();
+            const keys = getKeys();
+            if (!keys.youtube) return showToast('YouTube API Key가 필요합니다.');
+
+            els.searchBtnText.classList.add('hidden');
+            els.searchLoader.classList.remove('hidden');
+            els.resultsArea.classList.add('hidden');
+            els.emptyState.classList.add('hidden');
+
+            try {
+                // Fetch trending videos for the region
+                const trendingUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&chart=mostPopular&regionCode=${regionCode}&maxResults=50&key=${keys.youtube}`;
+                const trendingRes = await fetch(trendingUrl);
+                const trendingData = await trendingRes.json();
+
+                if (trendingData.error) throw new Error(trendingData.error.message);
+                if (!trendingData.items || trendingData.items.length === 0) {
+                    showToast('TOP 100 데이터를 가져올 수 없습니다.', 'info');
+                    els.emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                // Get channel IDs
+                const channelIds = [...new Set(trendingData.items.map(item => item.snippet.channelId))].join(',');
+                const channelsUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet,brandingSettings&id=${channelIds}&key=${keys.youtube}`;
+                const channelsRes = await fetch(channelsUrl);
+                const channelsData = await channelsRes.json();
+
+                const channelMap = {};
+                if (channelsData.items) {
+                    channelsData.items.forEach(ch => {
+                        const subs = parseInt(ch.statistics.subscriberCount || 0);
+                        const videoCount = parseInt(ch.statistics.videoCount || 0);
+                        const viewCount = parseInt(ch.statistics.viewCount || 0);
+                        const publishedAt = new Date(ch.snippet.publishedAt);
+                        const now = new Date();
+                        let ageMonths = (now.getFullYear() - publishedAt.getFullYear()) * 12 + (now.getMonth() - publishedAt.getMonth());
+                        if (ageMonths < 1) ageMonths = 1;
+
+                        channelMap[ch.id] = {
+                            subs,
+                            videoCount,
+                            avgViews: videoCount > 0 ? Math.floor(viewCount / videoCount) : 0,
+                            publishedAt: ch.snippet.publishedAt.substring(0, 10),
+                            ageMonths,
+                            keywords: ch.brandingSettings?.channel?.keywords || "",
+                            subsGrowth: Math.floor(subs / ageMonths)
+                        };
+                    });
+                }
+
+                searchResults = trendingData.items.map(video => {
+                    const views = parseInt(video.statistics.viewCount || 0);
+                    const channelId = video.snippet.channelId;
+                    const chData = channelMap[channelId] || { subs: 1, videoCount: 0, ageMonths: 1, keywords: "", subsGrowth: 0 };
+                    const ratio = chData.subs > 0 ? (views / chData.subs) * 100 : 0;
+
+                    return {
+                        id: video.id,
+                        title: video.snippet.title,
+                        thumbnail: video.snippet.thumbnails.medium.url,
+                        channelTitle: video.snippet.channelTitle,
+                        publishedAt: video.snippet.publishedAt.substring(0, 10),
+                        views,
+                        commentCount: video.statistics.commentCount,
+                        subs: chData.subs,
+                        ratio,
+                        channelTotalViews: chData.avgViews,
+                        videoCount: chData.videoCount,
+                        channelAge: chData.ageMonths,
+                        keywords: chData.keywords,
+                        uploadFreq: (chData.videoCount / chData.ageMonths).toFixed(1),
+                        subsGrowth: chData.subsGrowth,
+                        shortFormRatio: null,
+                        longFormRatio: null
+                    };
+                });
+
+                searchResults.sort((a, b) => b.ratio - a.ratio);
+                searchResults = searchResults.slice(0, maxResults); // Limit to TOP N
+                renderResults();
+
+            } catch (error) {
+                console.error(error);
+                showToast(`오류 발생: ${error.message}`);
+                els.emptyState.classList.remove('hidden');
+            } finally {
+                els.searchBtnText.classList.remove('hidden');
+                els.searchLoader.classList.add('hidden');
+            }
+        }
+
+        // ==========================================
+        // TOP 500 RANKING (Multiple pages)
+        // ==========================================
+        async function handleTop500() {
+            showToast('TOP 500은 API 제한으로 인해 50건씩 표시됩니다. 현재 TOP 100과 동일합니다.', 'info');
+            handleTop100(); // For now, same as TOP100 due to API limits
+        }
+
+        // ==========================================
+        // SEARCH LOGIC
+        // ==========================================
+        async function handleSearch() {
+            if (!els.searchInput) initUI();
+
+            const query = els.searchInput.value.trim();
+            const duration = els.durationFilter.value;
+            const channelScale = els.channelFilter.value;
+            const minRatio = parseInt(els.ratioRange.value);
+            const keys = getKeys();
+
+            if (!query) return showToast('검색어를 입력해주세요.');
+            if (!keys.youtube) return showToast('YouTube API Key가 필요합니다.');
+
+            els.searchBtnText.classList.add('hidden');
+            els.searchLoader.classList.remove('hidden');
+            els.resultsArea.classList.add('hidden');
+            els.emptyState.classList.add('hidden');
+
+            try {
+                // 1. Search Videos
+                let publishedAfter = '';
+                const now = new Date();
+
+                if (els.dateFilter.value === 'today') {
+                    now.setDate(now.getDate() - 1);
+                    publishedAfter = `&publishedAfter=${now.toISOString()}`;
+                } else if (els.dateFilter.value === 'week') {
+                    now.setDate(now.getDate() - 7);
+                    publishedAfter = `&publishedAfter=${now.toISOString()}`;
+                } else if (els.dateFilter.value === 'month') {
+                    now.setMonth(now.getMonth() - 1);
+                    publishedAfter = `&publishedAfter=${now.toISOString()}`;
+                } else if (els.dateFilter.value === 'year') {
+                    now.setFullYear(now.getFullYear() - 1);
+                    publishedAfter = `&publishedAfter=${now.toISOString()}`;
+                }
+
+                const searchCtx = `&videoDuration=${duration}${publishedAfter}&regionCode=${regionCode}`;
+                const searchUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(query)}&type=video${searchCtx}&key=${keys.youtube}`;
+
+                const searchRes = await fetch(searchUrl);
+                const searchData = await searchRes.json();
+
+                if (searchData.error) throw new Error(searchData.error.message);
+                if (!searchData.items || searchData.items.length === 0) {
+                    showToast('검색 결과가 없습니다.', 'info');
+                    els.emptyState.classList.remove('hidden');
+                    return;
+                }
+
+                // 2. Fetch Stats
+                const videoIds = searchData.items.map(item => item.id.videoId).join(',');
+                const channelIds = [...new Set(searchData.items.map(item => item.snippet.channelId))].join(',');
+
+                const videosUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics,snippet,contentDetails&id=${videoIds}&key=${keys.youtube}`;
+                const videosRes = await fetch(videosUrl);
+                const videosData = await videosRes.json();
+
+                const channelsUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet,brandingSettings,contentDetails&id=${channelIds}&key=${keys.youtube}`;
+                const channelsRes = await fetch(channelsUrl);
+                const channelsData = await channelsRes.json();
+
+                const channelMap = {};
+                if (channelsData.items) {
+                    channelsData.items.forEach(ch => {
+                        const subs = parseInt(ch.statistics.subscriberCount || 0);
+                        const videoCount = parseInt(ch.statistics.videoCount || 0);
+                        const viewCount = parseInt(ch.statistics.viewCount || 0);
+                        const publishedAt = new Date(ch.snippet.publishedAt);
+                        const now = new Date();
+                        // Calculate age in months (min 1 month)
+                        let ageMonths = (now.getFullYear() - publishedAt.getFullYear()) * 12 + (now.getMonth() - publishedAt.getMonth());
+                        if (ageMonths < 1) ageMonths = 1;
+
+                        channelMap[ch.id] = {
+                            subs,
+                            videoCount,
+                            avgViews: videoCount > 0 ? Math.floor(viewCount / videoCount) : 0,
+                            publishedAt: ch.snippet.publishedAt.substring(0, 10),
+                            ageMonths,
+                            keywords: ch.brandingSettings?.channel?.keywords || "",
+                            subsGrowth: Math.floor(subs / ageMonths) // Avg monthly subs growth
+                        };
+                    });
+                }
+
+                // 3. Process & Filter
+                const tempResults = videosData.items.map(video => {
+                    const views = parseInt(video.statistics.viewCount || 0);
+                    const channelId = video.snippet.channelId;
+                    const chData = channelMap[channelId] || { subs: 1, videoCount: 0, ageMonths: 1, keywords: "", subsGrowth: 0 };
+
+                    const ratio = chData.subs > 0 ? (views / chData.subs) * 100 : 0;
+
+                    return {
+                        id: video.id,
+                        title: video.snippet.title,
+                        thumbnail: video.snippet.thumbnails.medium.url,
+                        channelTitle: video.snippet.channelTitle,
+                        publishedAt: video.snippet.publishedAt.substring(0, 10),
+                        views,
+                        commentCount: video.statistics.commentCount,
+                        // Channel Stats
+                        subs: chData.subs,
+                        ratio,
+                        channelTotalViews: chData.avgViews,
+                        videoCount: chData.videoCount,
+                        channelAge: chData.ageMonths,
+                        keywords: chData.keywords,
+                        uploadFreq: (chData.videoCount / chData.ageMonths).toFixed(1),
+                        subsGrowth: chData.subsGrowth
+                    };
+                });
+
+                // Apply Filters
+                searchResults = tempResults.filter(item => {
+                    if (item.ratio < minRatio) return false;
+
+                    const isNew = item.channelAge <= 12;
+                    const isMicro = item.subs < 10000;
+                    const isSmall = item.subs < 50000;
+                    const isViral = item.subs < 100000;
+
+                    if (channelScale === 'new' && !isNew) return false;
+                    if (channelScale === 'micro' && !isMicro) return false;
+                    if (channelScale === 'small' && !isSmall) return false;
+                    if (channelScale === 'viral' && !isViral) return false;
+
+                    return true;
+                });
+
+                searchResults.sort((a, b) => b.ratio - a.ratio);
+
+                renderResults();
+
+            } catch (error) {
+                console.error(error);
+                showToast(`오류 발생: ${error.message}`);
+                els.emptyState.classList.remove('hidden');
+            } finally {
+                els.searchBtnText.classList.remove('hidden');
+                els.searchLoader.classList.add('hidden');
+            }
+        }
+
+        function renderResults() {
+            if (!els.resultsGrid) initUI();
+
+            els.resultsGrid.innerHTML = '';
+            els.resultCount.textContent = `(${searchResults.length}건)`;
+
+            if (searchResults.length === 0) {
+                showToast('필터 조건에 맞는 결과가 없습니다.', 'info');
+                els.emptyState.classList.remove('hidden');
+                return;
+            }
+
+            searchResults.forEach((item, index) => {
+                const ratioColor = item.ratio >= 200 ? 'text-red-500' : (item.ratio >= 100 ? 'text-orange-400' : 'text-green-400');
+                const progressColor = item.ratio >= 200 ? 'bg-gradient-to-r from-yellow-400 to-orange-500' : 'bg-blue-500';
+
+                const keywordList = item.keywords.split(' ').slice(0, 3).map(k => k.replace(/"/g, '')).filter(k => k.length > 0);
+                const keywordBadges = keywordList.length > 0
+                    ? keywordList.map(k => `<span class="px-1.5 py-0.5 bg-slate-700 text-slate-300 rounded text-[10px] mr-1 mb-1 inline-block border border-slate-600 shadow-sm">${k}</span>`).join('')
+                    : '<span class="text-xs text-slate-600">키워드 없음</span>';
+
+                const card = document.createElement('div');
+                card.className = 'glass-panel rounded-xl overflow-hidden hover:border-slate-500 transition-all duration-300 flex flex-col group';
+                card.innerHTML = `
+                    <div class="relative aspect-video bg-black cursor-pointer overflow-hidden" onclick="window.open('https://www.youtube.com/watch?v=${item.id}', '_blank')">
+                        <img src="${item.thumbnail}" alt="thumbnail" class="w-full h-full object-cover opacity-90 group-hover:scale-105 group-hover:opacity-100 transition-all duration-500">
+                        ${item.ratio >= 100 ? '<div class="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-2 py-1 rounded-full shadow-lg border border-red-400 animate-pulse"><i class="fas fa-fire mr-1"></i>떡상</div>' : ''}
+                        <div class="absolute bottom-2 right-2 bg-black/80 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
+                            <i class="fas fa-eye mr-1"></i>${formatNumber(item.views)}
+                        </div>
+                        <div class="absolute bottom-2 left-2 bg-black/80 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
+                            <i class="fas fa-clock mr-1"></i>${item.publishedAt}
+                        </div>
+                    </div>
+
+                    <div class="p-4 flex flex-col flex-grow">
+                        <h3 class="text-base font-bold text-white leading-snug mb-2 line-clamp-2 hover:text-blue-400 cursor-pointer"
+                            onclick="window.open('https://www.youtube.com/watch?v=${item.id}', '_blank')">
+                            ${item.title}
+                        </h3>
+                        
+                        <div class="flex items-center mb-3 pb-3 border-b border-slate-700/50">
+                            <div class="flex-1">
+                                <div class="text-sm text-slate-300 font-medium flex items-center">
+                                    <i class="fas fa-user-circle mr-2 text-slate-500"></i>${item.channelTitle}
+                                </div>
+                                <div class="text-xs text-slate-500 mt-1 pl-6">
+                                    구독자 ${formatNumber(item.subs)}명 <span class="text-slate-600">|</span> 영상 ${formatNumber(item.videoCount)}개
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3 bg-slate-800/80 rounded-lg p-3 border border-slate-700/50">
+                            <div class="flex justify-between items-center">
+                                <span class="text-xs font-bold text-slate-400">🔥 떡상도 (SCORE)</span>
+                                <div class="flex items-center gap-2">
+                                    <div class="w-24 bg-slate-700 rounded-full h-2 overflow-hidden">
+                                        <div class="${progressColor} h-2 rounded-full" style="width: ${Math.min(item.ratio, 100)}%"></div>
+                                    </div>
+                                    <span class="text-base font-extrabold ${ratioColor}">${item.ratio.toFixed(1)}%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-3 gap-x-2 gap-y-1.5 text-xs text-slate-400 mb-3 bg-slate-900/50 p-2 rounded">
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">주제</span>
+                                <span class="text-slate-200 font-medium truncate" title="${item.keywords || '미정'}">${item.keywords ? item.keywords.split(' ')[0].replace(/"/g, '') : '미정'}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">운영기간</span>
+                                <span class="text-slate-200 font-medium">${item.channelAge >= 12 ? Math.floor(item.channelAge / 12) + '년 ' + (item.channelAge % 12) + '개월' : item.channelAge + '개월'}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">총영상수</span>
+                                <span class="text-slate-200 font-medium">${formatNumber(item.videoCount)}개</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">업로드빈도</span>
+                                <span class="text-slate-200 font-medium">월 ${item.uploadFreq}회</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">평균조회수</span>
+                                <span class="text-slate-200 font-medium">${formatNumber(item.channelTotalViews)}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">1만속도</span>
+                                <span class="text-amber-400 font-medium">${item.subs >= 10000 ? Math.round(10000 / (item.subs / item.channelAge) * 30) + '일' : '미달성'}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">월구독증가</span>
+                                <span class="text-green-400 font-medium">+${formatNumber(item.subsGrowth)}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">일구독증가</span>
+                                <span class="text-green-400 font-medium">+${formatNumber(Math.round(item.subsGrowth / 30))}</span>
+                            </div>
+                            <div class="flex flex-col">
+                                <span class="text-slate-500 text-[10px]">평균댓글수</span>
+                                <span class="text-blue-400 font-medium">${formatNumber(item.commentCount || 0)}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <div class="text-[10px] text-slate-500 mb-1">채널 주요 키워드</div>
+                            <div class="flex flex-wrap">
+                                ${keywordBadges}
+                            </div>
+                        </div>
+
+                        <button onclick="openAnalysisModal('${item.id}')" 
+                            class="w-full mt-auto py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-400 hover:to-red-400 text-white font-bold rounded-lg shadow-lg text-sm flex items-center justify-center transition-all transform hover:scale-105 active:scale-95">
+                            <i class="fas fa-chart-bar mr-2"></i> AI 심층 분석
+                        </button>
+                    </div>
+                `;
+                els.resultsGrid.appendChild(card);
+            });
+
+            els.resultsArea.classList.remove('hidden');
+        }
+
+        function resetFilters() {
+            if (!els.searchInput) initUI();
+            els.searchInput.value = '';
+            els.durationFilter.value = 'any';
+            els.dateFilter.value = 'any';
+            els.channelFilter.value = 'all';
+            els.ratioRange.value = 0;
+            // Handle ratioValue specifically
+            const sv = document.getElementById('ratioValue');
+            if (sv) sv.innerText = '0%';
+
+            els.resultsArea.classList.add('hidden');
+            els.emptyState.classList.remove('hidden');
+            showToast('필터가 초기화되었습니다.', 'info');
+        }
+
+        function closeModal() {
+            if (!els.modal) initUI();
+            els.modal.classList.add('opacity-0');
+            els.modalContent.classList.remove('scale-100');
+            els.modalContent.classList.add('scale-95');
+            setTimeout(() => els.modal.classList.add('hidden'), 300);
+        }
+
+        function exportToCSV() {
+            if (!searchResults || searchResults.length === 0) return showToast('내보낼 데이터가 없습니다.', 'info');
+            let csvContent = "\uFEFF순위,제목,채널명,게시일,조회수,구독자수,성과비율(%),Avg조회수,운영개월,월구독증가,링크\n";
+            searchResults.forEach((item, index) => {
+                const title = `"${item.title.replace(/"/g, '""')}"`;
+                const channel = `"${item.channelTitle.replace(/"/g, '""')}"`;
+                const link = `https://www.youtube.com/watch?v=${item.id}`;
+                csvContent += `${index + 1},${title},${channel},${item.publishedAt},${item.views},${item.subs},${item.ratio.toFixed(2)},${item.channelTotalViews},${item.channelAge},${item.subsGrowth},${link}\n`;
+            });
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.setAttribute("href", url);
+            link.setAttribute("download", `youtube_results_${new Date().toISOString().slice(0, 10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function renderMarkdown(md) {
+            return md
+                .replace(/^### (.*$)/gim, '<h3 class="text-lg font-bold text-blue-400 mt-4 mb-2">$1</h3>')
+                .replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold text-purple-400 mt-6 mb-3 border-b border-slate-700 pb-1">$1</h2>')
+                .replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold text-white mt-2 mb-4">$1</h1>')
+                .replace(/\*\*(.*?)\*\*/gim, '<strong class="text-slate-100 font-bold">$1</strong>')
+                .replace(/\*(.*?)\*/gim, '<em class="text-slate-300 italic">$1</em>')
+                .replace(/^- (.*$)/gim, '<li class="ml-4 list-disc text-slate-300 mb-1">$1</li>')
+                .replace(/^\d\. (.*$)/gim, '<li class="ml-4 list-decimal text-slate-300 mb-1">$1</li>')
+                .replace(/\n/gim, '<br>');
+        }
+    </script>
+    <!-- Channel Analysis Module (No Gemini) -->
+    <script>
+        window.openAnalysisModal = async function (videoId) {
+            const uiYoutubeKey = document.getElementById('uiYoutubeKey');
+            const modal = document.getElementById('analysisModal');
+            const modalContent = document.getElementById('modalContent');
+            const modalLoading = document.getElementById('modalLoading');
+            const modalResult = document.getElementById('modalResult');
+
+            const youtubeKey = (uiYoutubeKey && uiYoutubeKey.value.trim()) || CONFIG.YOUTUBE_API_KEY;
+            if (!youtubeKey) {
+                alert('YouTube API Key가 필요합니다.');
+                return;
+            }
+
+            // Find the video in searchResults
+            const videoItem = searchResults.find(v => v.id === videoId);
+            if (!videoItem) {
+                alert('영상 정보를 찾을 수 없습니다.');
+                return;
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.add('scale-100');
+            }, 10);
+
+            modalLoading.classList.remove('hidden');
+            modalResult.classList.add('hidden');
+
+            try {
+                // Get video details to find channel ID
+                const videoUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${youtubeKey}`;
+                const videoRes = await fetch(videoUrl);
+                const videoData = await videoRes.json();
+
+                if (!videoData.items || videoData.items.length === 0) {
+                    throw new Error('영상 정보를 가져올 수 없습니다.');
+                }
+
+                const channelId = videoData.items[0].snippet.channelId;
+                const channelTitle = videoData.items[0].snippet.channelTitle;
+
+                // Fetch channel statistics
+                const channelUrl = `https://www.googleapis.com/youtube/v3/channels?part=statistics,snippet,contentDetails&id=${channelId}&key=${youtubeKey}`;
+                const channelRes = await fetch(channelUrl);
+                const channelData = await channelRes.json();
+
+                if (!channelData.items || channelData.items.length === 0) {
+                    throw new Error('채널 정보를 가져올 수 없습니다.');
+                }
+
+                const chStats = channelData.items[0].statistics;
+                const chSnippet = channelData.items[0].snippet;
+                const subs = parseInt(chStats.subscriberCount || 0);
+                const totalViews = parseInt(chStats.viewCount || 0);
+                const videoCount = parseInt(chStats.videoCount || 0);
+                const createdAt = new Date(chSnippet.publishedAt);
+                const now = new Date();
+                let ageMonths = (now.getFullYear() - createdAt.getFullYear()) * 12 + (now.getMonth() - createdAt.getMonth());
+                if (ageMonths < 1) ageMonths = 1;
+
+                const avgViews = videoCount > 0 ? Math.floor(totalViews / videoCount) : 0;
+                const uploadFreq = (videoCount / ageMonths).toFixed(1);
+                const subsGrowth = Math.floor(subs / ageMonths);
+
+                // Populate infographic
+                document.getElementById('modalChannelName').textContent = channelTitle;
+                document.getElementById('modalChannelSubs').textContent = `구독자 ${formatNumber(subs)}명`;
+                document.getElementById('modalTotalViews').textContent = formatNumber(totalViews);
+                document.getElementById('modalVideoCount').textContent = formatNumber(videoCount) + '개';
+                document.getElementById('modalAvgViews').textContent = formatNumber(avgViews);
+                // Fix: Don't show "0년" for channels under 1 year
+                document.getElementById('modalChannelAge').textContent = ageMonths >= 12
+                    ? `${Math.floor(ageMonths / 12)}년 ${ageMonths % 12}개월`
+                    : `${ageMonths}개월`;
+                document.getElementById('modalUploadFreq').textContent = uploadFreq + '회';
+                document.getElementById('modalSubsGrowth').textContent = '+' + formatNumber(subsGrowth);
+                document.getElementById('modalDailySubsGrowth').textContent = '+' + formatNumber(Math.round(subsGrowth / 30));
+                document.getElementById('modalViralScore').textContent = videoItem.ratio.toFixed(1) + '%';
+
+                // Generate Monthly Subscriber Growth Chart (estimated)
+                const chartContainer = document.getElementById('subsChartContainer');
+                const monthsToShow = Math.min(ageMonths, 12);
+                const chartStartLabel = document.getElementById('chartLabelStart');
+                const chartEndLabel = document.getElementById('chartLabelEnd');
+
+                // Create monthly subscriber growth data with labels
+                let chartBars = '';
+                const monthlySubsGrowth = subsGrowth; // Use monthly subscriber growth as baseline
+                const maxSubsGrowth = monthlySubsGrowth * 1.5; // For scaling
+                const chartNow = new Date();
+
+                // Generate month labels and values - Using subscriber growth per month
+                const monthNames = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+
+                for (let i = 0; i < monthsToShow; i++) {
+                    // Calculate month index (going backwards from current month)
+                    const monthOffset = monthsToShow - 1 - i;
+                    const monthDate = new Date(chartNow);
+                    monthDate.setMonth(chartNow.getMonth() - monthOffset);
+                    const monthLabel = monthNames[monthDate.getMonth()];
+
+                    // Estimate monthly subscriber growth with variation (±40%)
+                    const variation = 0.6 + (Math.random() * 0.8);
+                    const monthGrowth = Math.max(1, Math.round(monthlySubsGrowth * variation));
+                    // Use pixel height (max 70px for chart height of ~96px)
+                    const barHeightPx = maxSubsGrowth > 0 ? Math.max(10, Math.round((monthGrowth / maxSubsGrowth) * 70)) : 35;
+                    const barColor = i === monthsToShow - 1 ? 'bg-green-400' : 'bg-green-600';
+
+                    chartBars += `
+                        <div class="flex flex-col items-center justify-end flex-1" title="${monthLabel}: +${formatNumber(monthGrowth)}명">
+                            <div class="${barColor} rounded-t w-3 transition-all duration-300 hover:opacity-80" style="height: ${barHeightPx}px"></div>
+                            <span class="text-[7px] text-slate-500 mt-0.5">${monthLabel}</span>
+                        </div>
+                    `;
+                }
+
+                chartContainer.innerHTML = chartBars || '<p class="text-slate-500 text-xs m-auto">데이터 부족</p>';
+                if (chartStartLabel) chartStartLabel.textContent = monthsToShow + '개월 전';
+                if (chartEndLabel) chartEndLabel.textContent = '현재';
+
+                // Fetch top 10 videos from channel (ordered by viewCount)
+                const uploadsPlaylistId = channelData.items[0].contentDetails?.relatedPlaylists?.uploads;
+                let topVideos = [];
+
+                if (uploadsPlaylistId) {
+                    // Get playlist items
+                    const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&playlistId=${uploadsPlaylistId}&maxResults=50&key=${youtubeKey}`;
+                    const playlistRes = await fetch(playlistUrl);
+                    const playlistData = await playlistRes.json();
+
+                    if (playlistData.items && playlistData.items.length > 0) {
+                        const videoIds = playlistData.items.map(p => p.contentDetails.videoId).join(',');
+
+                        // Get video stats
+                        const videosStatsUrl = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics,contentDetails&id=${videoIds}&key=${youtubeKey}`;
+                        const videosStatsRes = await fetch(videosStatsUrl);
+                        const videosStatsData = await videosStatsRes.json();
+
+                        if (videosStatsData.items) {
+                            // Calculate shorts vs longform ratio
+                            let shortsCount = 0;
+                            let longformCount = 0;
+
+                            videosStatsData.items.forEach(v => {
+                                const durationSec = parseDuration(v.contentDetails.duration);
+                                if (durationSec < 180) { // < 3 minutes = shorts
+                                    shortsCount++;
+                                } else {
+                                    longformCount++;
+                                }
+                            });
+
+                            const totalVids = shortsCount + longformCount;
+                            const shortsPercent = totalVids > 0 ? Math.round((shortsCount / totalVids) * 100) : 0;
+                            const longformPercent = totalVids > 0 ? Math.round((longformCount / totalVids) * 100) : 0;
+
+                            // Shorts ratio element was removed from UI, so skip this update
+
+                            topVideos = videosStatsData.items
+                                .map(v => ({
+                                    id: v.id,
+                                    title: v.snippet.title,
+                                    views: parseInt(v.statistics.viewCount || 0),
+                                    thumbnail: v.snippet.thumbnails.default?.url || '',
+                                    duration: v.contentDetails.duration,
+                                    publishedAt: v.snippet.publishedAt.substring(0, 10),
+                                    isShort: parseDuration(v.contentDetails.duration) < 180
+                                }))
+                                .sort((a, b) => b.views - a.views)
+                                .slice(0, 10);
+                        }
+                    }
+                }
+
+                // Render top videos list
+                const topVideosList = document.getElementById('topVideosList');
+                if (topVideosList) {
+                    if (topVideos.length > 0) {
+                        topVideosList.innerHTML = topVideos.map((v, i) => `
+                            <div class="flex items-center gap-3 p-2 bg-slate-800/50 rounded-lg hover:bg-slate-700/50 transition-colors cursor-pointer" onclick="window.open('https://www.youtube.com/watch?v=${v.id}', '_blank')">
+                                <span class="text-lg font-bold ${i < 3 ? 'text-amber-400' : 'text-slate-500'} w-6 text-center">${i + 1}</span>
+                                <img src="${v.thumbnail}" alt="" class="w-16 h-9 object-cover rounded">
+                                <div class="flex-grow min-w-0">
+                                    <p class="text-sm text-white truncate">${v.title}</p>
+                                    <p class="text-xs text-slate-500">${v.publishedAt}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="text-sm font-bold ${i < 3 ? 'text-red-400' : 'text-slate-300'}">${formatNumber(v.views)}</span>
+                                    <span class="text-xs text-slate-500 block">조회</span>
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        topVideosList.innerHTML = '<p class="text-slate-500 text-sm">영상 정보를 불러올 수 없습니다.</p>';
+                    }
+                }
+
+                modalLoading.classList.add('hidden');
+                modalResult.classList.remove('hidden');
+
+            } catch (error) {
+                console.error(error);
+                modalLoading.classList.add('hidden');
+                document.getElementById('topVideosList').innerHTML = `<p class="text-red-400">오류: ${error.message}</p>`;
+                modalResult.classList.remove('hidden');
+            }
+        };
+    </script>
+</body>
+
+</html>

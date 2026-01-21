@@ -1,0 +1,829 @@
+/* ========================================
+   AntiGravity: Nano Banana Pro Theme
+   ======================================== */
+
+:root {
+    /* Base Colors - Deep Premium Space */
+    --bg-main: #020202;
+    --bg-glass: rgba(255, 255, 255, 0.03);
+    --bg-glass-hover: rgba(255, 255, 255, 0.08);
+
+    /* Decoration Colors - Nano Banana Identity Refined */
+    --accent-primary: #FFD700;
+    /* Cyber Yellow */
+    --accent-secondary: #FF8800;
+    /* Deep Neon Orange */
+    --accent-glow: rgba(255, 215, 0, 0.3);
+
+    /* Borders & Lines */
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --border-highlight: rgba(255, 215, 0, 0.6);
+
+    /* Typography */
+    --text-primary: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.5);
+    --text-accent: #FFD700;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+body {
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Global Background: Premium Noise & Nebula */
+.global-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 15% 50%, rgba(255, 215, 0, 0.03), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(255, 100, 0, 0.02), transparent 25%),
+        linear-gradient(to bottom, #020202, #050505);
+}
+
+/* Subtle Noise Overlay */
+.global-background::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.03;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Header */
+.header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 100;
+    padding: 24px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+}
+
+.logo-text {
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: #fff;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+/* Brand Mark Dot */
+.logo-text::after {
+    content: '.';
+    color: var(--accent-primary);
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.nav-link {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+}
+
+.nav-link:hover {
+    color: var(--text-primary);
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.cta-button {
+    border: 1px solid var(--border-glass);
+    padding: 10px 24px;
+    border-radius: 4px;
+    background: rgba(255, 215, 0, 0.05);
+    /* Subtle Yellow Tint */
+    backdrop-filter: blur(10px);
+    color: var(--accent-primary);
+    border-color: rgba(255, 215, 0, 0.2);
+    transition: all 0.3sease;
+}
+
+.cta-button:hover {
+    background: var(--accent-primary);
+    color: #000;
+    box-shadow: 0 0 20px var(--accent-glow);
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    z-index: 5;
+    /* Base context */
+}
+
+.spline-background {
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    transform: translate(-50%, -50%) scale(0.9);
+    width: 140%;
+    height: 140%;
+    z-index: 1;
+    /* Above Unicorn */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: visible;
+    /* pointer-events removed to allow iframe rendering */
+}
+
+.spline-background iframe {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: none;
+}
+
+/* Unicorn Studio Layer (Behind 3D) */
+.unicorn-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 0;
+    /* Background Layer */
+    opacity: 1;
+    pointer-events: none;
+    object-fit: cover;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    /* Foreground Content */
+    text-align: center;
+    max-width: 1400px;
+    /* Increased from 800px to fit large text */
+    width: 90%;
+    padding: 0 20px;
+}
+
+.hero-title {
+    font-size: clamp(4rem, 15vw, 12rem);
+    font-weight: 900;
+    line-height: 1.1;
+    /* Increased to prevent clipping */
+    letter-spacing: -0.06em;
+    /* Restored Gradient */
+    background: linear-gradient(180deg, #FFFFFF 0%, rgba(255, 255, 255, 0.4) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    margin-bottom: 10px;
+    padding: 10px 0;
+    /* Extra space for ascenders/descenders */
+    text-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    animation: fadeIn 1.5s ease-out forwards;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0;
+    animation: fadeIn 1.5s ease-out 0.5s forwards;
+}
+
+.hero-cta {
+    pointer-events: auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--text-primary);
+    color: #000;
+    padding: 16px 40px;
+    border-radius: 2px;
+    /* Sharper corners for futuristic look */
+    font-weight: 700;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    opacity: 0;
+    animation: slideUp 1s ease-out 1s forwards;
+    border: 1px solid white;
+}
+
+.hero-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+    letter-spacing: 1px;
+}
+
+/* 
+   NANO BANANA PRO GRID 
+   - Futuristic styling with tech accents
+*/
+.grid-section {
+    position: relative;
+    z-index: 10;
+    max-width: 1400px;
+    /* Wider container */
+    margin: 0 auto;
+    padding: 140px 40px;
+}
+
+.section-header {
+    text-align: left;
+    margin-bottom: 80px;
+    border-left: 4px solid var(--accent-primary);
+    padding-left: 30px;
+}
+
+.section-title {
+    font-size: 4rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin-bottom: 16px;
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 Column layout */
+    grid-template-rows: 400px 300px;
+    gap: 30px;
+}
+
+/* Futuristic Card Base - High Grade */
+.grid-card {
+    background: rgba(10, 10, 12, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 20px;
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    text-decoration: none;
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Holographic Edge Effect */
+.grid-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 16px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.01), rgba(255, 255, 255, 0.05));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* Hover State */
+.grid-card:hover {
+    transform: translateY(-10px) scale(1.015);
+    background: rgba(20, 20, 25, 0.85);
+    box-shadow: 0 28px 56px -10px rgba(0, 0, 0, 0.55), 0 0 25px rgba(255, 215, 0, 0.06);
+    border-color: rgba(255, 215, 0, 0.35);
+}
+
+.grid-card:hover::before {
+    background: linear-gradient(135deg, var(--accent-primary), transparent 40%);
+    opacity: 1;
+}
+
+/* Corner Accents removed for cleaner look, replaced by gradient borders */
+
+/* Glow Effect */
+.card-glow-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 215, 0, 0.1), transparent 40%);
+    opacity: 0;
+    transition: opacity 0.5s;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.grid-card:hover .card-glow-effect {
+    opacity: 1;
+}
+
+/* Card Specifics */
+.main-card {
+    grid-column: span 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.card-heading {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 0.95;
+    background: linear-gradient(180deg, #fff, #999);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 2rem;
+    z-index: 1;
+}
+
+.sub-card {
+    grid-column: span 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* =========================================
+   NEW: Auto-Rolling Pipeline (High Fidelity)
+   ========================================= */
+.pipeline-container {
+    height: 600px;
+    overflow: hidden;
+    position: relative;
+    /* Removed default border-left for a cleaner floating look */
+    /* border-left: 2px solid rgba(255, 255, 255, 0.1); */
+    padding: 20px 0;
+}
+
+/* Track Line Background */
+.pipeline-container::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 24px;
+    /* Center of the dots */
+    width: 2px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1) 20%, rgba(255, 255, 255, 0.1) 80%, transparent);
+    z-index: 0;
+}
+
+.pipeline-track {
+    display: flex;
+    flex-direction: column;
+    animation: scrollVertical 30s linear infinite;
+}
+
+/* Group wrapper */
+.pipeline-group {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    /* Spacing between items */
+    padding-bottom: 16px;
+}
+
+/* Futuristic Data Block Item */
+.pipeline-item {
+    position: relative;
+    padding: 24px 24px 24px 60px;
+    /* Space for dot line */
+    cursor: pointer;
+    transition: all 0.4s ease;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    margin-right: 10px;
+    /* Spacing for hover expansion */
+}
+
+/* Hover Effect: Light up */
+.pipeline-item:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 215, 0, 0.3);
+    transform: translateX(10px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+}
+
+.pipeline-item:hover h4 {
+    color: var(--accent-primary);
+}
+
+/* The Dot */
+.pipeline-dot {
+    position: absolute;
+    left: 19px;
+    /* Center on track line (24px center - 5px radius) */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 12px;
+    background: #1a1a1a;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.4s;
+    z-index: 2;
+}
+
+.pipeline-item:hover .pipeline-dot {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 15px var(--accent-primary);
+    transform: translateY(-50%) scale(1.3);
+}
+
+/* Connecting Line (Active indicator) */
+.pipeline-item::before {
+    content: '';
+    position: absolute;
+    left: 24px;
+    top: -50%;
+    height: 200%;
+    width: 2px;
+    background: var(--accent-primary);
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 1;
+}
+
+/* Content Typography */
+.pipeline-content h4 {
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    transition: color 0.3s;
+    letter-spacing: -0.01em;
+}
+
+.pipeline-content p {
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-family: 'Fira Code', monospace;
+    /* Tech feel */
+    opacity: 0.7;
+}
+
+/* Fades */
+.pipeline-fade-top,
+.pipeline-fade-bottom {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 50px;
+    z-index: 5;
+    pointer-events: none;
+}
+
+.pipeline-fade-top {
+    top: 0;
+    background: linear-gradient(to bottom, var(--bg-main), transparent);
+}
+
+.pipeline-fade-bottom {
+    bottom: 0;
+    background: linear-gradient(to top, var(--bg-main), transparent);
+}
+
+@keyframes scrollVertical {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-50%);
+    }
+
+    /* Move half way (one group height) */
+}
+
+
+/* =========================================
+   NEW: Premium Mock Comment UI (Nano Banana Pro)
+   ========================================= */
+.mock-comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.mock-comment-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: #111;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.mock-comment-item::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #333;
+}
+
+/* Highlight for positive sentiment */
+.mock-comment-item:has(.positive)::before {
+    background: var(--accent-primary);
+    box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.mock-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #333;
+}
+
+.mock-text-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.mock-user {
+    font-size: 0.7rem;
+    color: #888;
+    font-weight: 600;
+}
+
+.mock-line {
+    height: 6px;
+    background: #333;
+    border-radius: 2px;
+}
+
+.long {
+    width: 80%;
+}
+
+.medium {
+    width: 60%;
+}
+
+.short {
+    width: 40%;
+}
+
+.mock-sentiment {
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.positive {
+    color: var(--accent-primary);
+}
+
+.neutral {
+    color: #888;
+}
+
+/* Tool Palette List */
+.column-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    justify-content: center;
+    height: 100%;
+}
+
+.tool-list-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+
+.tool-list-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.tool-list-item i {
+    color: var(--accent-primary);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .workflow-container {
+        grid-template-columns: 1fr;
+    }
+
+    .pipeline-list {
+        margin-top: 40px;
+        border-left: none;
+        border-top: 2px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        overflow-x: auto;
+        padding-top: 20px;
+        margin-left: 0;
+    }
+
+    .pipeline-item {
+        padding: 20px;
+        min-width: 150px;
+    }
+
+    .pipeline-dot {
+        top: -7px;
+        left: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 15vw;
+    }
+
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .main-card {
+        grid-column: span 1;
+    }
+
+    .pipeline-list {
+        flex-direction: column;
+        border-top: none;
+        border-left: 2px solid rgba(255, 255, 255, 0.1);
+        padding-left: 20px;
+    }
+
+    .pipeline-item {
+        padding: 20px 0 20px 40px;
+    }
+
+    .pipeline-dot {
+        left: -7px;
+        top: 28px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* =========================================
+   NEW: Bottom Banner (Video Production)
+   ========================================= */
+.index-bottom-banner {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 80px;
+    /* Centered with bottom margin */
+    padding: 60px;
+    border-radius: 4px;
+    /* Match other cards */
+    background: linear-gradient(to right, #09090b, #1a1a20);
+    border: 1px solid var(--border-glass);
+    position: relative;
+    overflow: hidden;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.4s ease;
+    /* Add subtle grid background pattern if desired */
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+}
+
+.index-bottom-banner::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 80% 50%, rgba(255, 215, 0, 0.05), transparent 60%);
+    pointer-events: none;
+}
+
+.index-bottom-banner:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.banner-content h2 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.banner-content p {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+}
+
+.banner-cta {
+    background: var(--accent-primary);
+    color: #000;
+    padding: 16px 40px;
+    border-radius: 2px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.3s;
+}
+
+.index-bottom-banner:hover .banner-cta {
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .index-bottom-banner {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+        padding: 40px 20px;
+    }
+}

@@ -248,14 +248,14 @@
     }
 }
 
-/* Inner Glow Backgrounds */
+/* Inner Glow Backgrounds - Soft Yellow Follow Effect */
 .card-glow {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: radial-gradient(800px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.03), transparent 40%);
+    background: radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 215, 0, 0.08), transparent 40%);
     z-index: 1;
     opacity: 0;
     transition: opacity 0.5s;
@@ -282,9 +282,11 @@
 }
 
 .active-tool .tool-badge {
-    background: #FFD700;
+    background: linear-gradient(90deg, #FFD700, #FF8800);
     color: #000;
-    box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
 }
 
 .glass {
@@ -294,35 +296,141 @@
     backdrop-filter: blur(10px);
 }
 
-/* New Diagonal Coming Soon */
+/* =========================================
+   PREMIUM LIQUID COMING SOON BADGE
+   ========================================= */
 .coming-soon-diagonal {
     position: absolute;
-    top: 60%;
+    top: 65%;
     left: 50%;
-    transform: translate(-50%, -50%) rotate(-15deg);
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid var(--border-glass);
-    padding: 15px 60px;
+    transform: translate(-50%, -50%) rotate(-12deg);
     z-index: 20;
-    backdrop-filter: blur(10px);
-    border-radius: 4px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     white-space: nowrap;
     display: flex;
     justify-content: center;
     align-items: center;
+
+    /* Liquid Glass Container */
+    background: linear-gradient(135deg,
+            rgba(123, 47, 255, 0.15) 0%,
+            rgba(0, 245, 255, 0.1) 50%,
+            rgba(255, 215, 0, 0.12) 100%);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+
+    /* Organic Liquid Shape */
+    padding: 18px 55px;
+    border-radius: 50px;
+
+    /* Premium Multi-layer Border */
+    border: 1.5px solid transparent;
+    background-clip: padding-box;
+
+    /* Glow & Shadow */
+    box-shadow:
+        0 8px 32px rgba(123, 47, 255, 0.2),
+        0 4px 16px rgba(0, 245, 255, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+
+    /* Animation */
+    animation: liquidFloat 4s ease-in-out infinite;
+}
+
+/* Holographic Border Effect */
+.coming-soon-diagonal::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 52px;
+    padding: 2px;
+    background: linear-gradient(135deg,
+            rgba(0, 245, 255, 0.6),
+            rgba(123, 47, 255, 0.4),
+            rgba(255, 215, 0, 0.5),
+            rgba(0, 245, 255, 0.6));
+    background-size: 300% 300%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: borderShift 3s ease-in-out infinite;
+    pointer-events: none;
+}
+
+/* Inner Glow Layer */
+.coming-soon-diagonal::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50px;
+    background: radial-gradient(ellipse 100% 80% at 50% 0%,
+            rgba(255, 255, 255, 0.15) 0%,
+            transparent 60%);
+    pointer-events: none;
 }
 
 .coming-soon-diagonal span {
     font-family: 'Inter', sans-serif;
-    font-weight: 900;
-    font-size: 1.5rem;
-    letter-spacing: 0.1em;
-    background: linear-gradient(90deg, #888, #fff, #888);
+    font-weight: 800;
+    font-size: 1.1rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    position: relative;
+    z-index: 1;
+
+    /* Prismatic Text Effect */
+    background: linear-gradient(90deg,
+            #00F5FF 0%,
+            #fff 25%,
+            #FFD700 50%,
+            #fff 75%,
+            #7B2FFF 100%);
+    background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    text-transform: uppercase;
+    animation: shimmerText 3s ease-in-out infinite;
+
+    /* Text Shadow for depth */
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Floating Animation */
+@keyframes liquidFloat {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) rotate(-12deg) scale(1);
+    }
+
+    50% {
+        transform: translate(-50%, -52%) rotate(-10deg) scale(1.02);
+    }
+}
+
+/* Border Gradient Shift */
+@keyframes borderShift {
+
+    0%,
+    100% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+}
+
+/* Text Shimmer Effect */
+@keyframes shimmerText {
+    0% {
+        background-position: -100% 0;
+    }
+
+    100% {
+        background-position: 100% 0;
+    }
 }
 
 /* Banner for Index Bottom */

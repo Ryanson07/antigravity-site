@@ -33,29 +33,369 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Custom Scrollbar for dark theme */
+        /* =========================================
+           PREMIUM DESIGN SYSTEM - AIMOTION STYLE
+           ========================================= */
+
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
 
         ::-webkit-scrollbar-track {
-            background: #0f172a;
+            background: #0a0a0c;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #334155;
+            background: linear-gradient(180deg, #FFD700, #FF8800);
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+            background: linear-gradient(180deg, #FFEA00, #FFA500);
         }
 
+        /* Base Body Override */
+        body {
+            background: #0a0a0c !important;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* =========================================
+           AURORA BACKGROUND
+           ========================================= */
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.5;
+            animation: aurora-float 20s ease-in-out infinite;
+        }
+
+        .aurora-mint {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(0, 255, 200, 0.4) 0%, transparent 70%);
+            top: -150px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .aurora-purple {
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.35) 0%, transparent 70%);
+            top: 30%;
+            right: -200px;
+            animation-delay: -7s;
+        }
+
+        .aurora-gold {
+            width: 450px;
+            height: 450px;
+            background: radial-gradient(circle, rgba(0, 212, 170, 0.2) 0%, transparent 70%);
+            bottom: -100px;
+            left: 30%;
+            animation-delay: -14s;
+        }
+
+        @keyframes aurora-float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate(30px, -20px) scale(1.05);
+            }
+
+            50% {
+                transform: translate(-20px, 30px) scale(0.95);
+            }
+
+            75% {
+                transform: translate(-30px, -10px) scale(1.02);
+            }
+        }
+
+        /* =========================================
+           NEON GLOW TITLE
+           ========================================= */
+        .neon-title {
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C00 50%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: none;
+        }
+
+        @keyframes neon-pulse {
+
+            0%,
+            100% {
+                filter: brightness(1);
+            }
+
+            50% {
+                filter: brightness(1.2);
+            }
+        }
+
+        /* =========================================
+           PREMIUM GLASS PANEL
+           ========================================= */
+        .premium-glass {
+            background: linear-gradient(135deg,
+                    rgba(20, 20, 25, 0.9) 0%,
+                    rgba(30, 30, 40, 0.8) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(96, 165, 250, 0.4),
+                    rgba(167, 139, 250, 0.4),
+                    transparent);
+        }
+
+        .premium-glass:hover {
+            border-color: rgba(167, 139, 250, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           PREMIUM BUTTONS
+           ========================================= */
+        .premium-btn-primary {
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            color: #fff;
+            font-weight: 600;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 28px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.25);
+        }
+
+        .premium-btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .premium-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.35);
+        }
+
+        .premium-btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .premium-btn-secondary {
+            background: rgba(255, 215, 0, 0.1);
+            color: #FFD700;
+            font-weight: 600;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .premium-btn-secondary:hover {
+            background: rgba(255, 215, 0, 0.15);
+            border-color: rgba(255, 215, 0, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .premium-btn-accent {
+            background: rgba(59, 130, 246, 0.1);
+            color: #60A5FA;
+            font-weight: 600;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 10px;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .premium-btn-accent:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* =========================================
+           GLOW INPUT
+           ========================================= */
+        .glow-input {
+            background: rgba(15, 15, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 14px;
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .glow-input:focus {
+            outline: none;
+            border-color: rgba(96, 165, 250, 0.4);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+        }
+
+        .glow-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        /* =========================================
+           PREMIUM SELECT
+           ========================================= */
+        .premium-select {
+            background: rgba(15, 15, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            padding: 10px 16px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .premium-select:focus {
+            outline: none;
+            border-color: rgba(96, 165, 250, 0.3);
+        }
+
+        .premium-select option {
+            background: #1a1a1f;
+            color: #fff;
+        }
+
+        /* =========================================
+           ANIMATED EMPTY STATE
+           ========================================= */
+        .empty-state {
+            position: relative;
+            text-align: center;
+            padding: 80px 20px;
+        }
+
+        .empty-icon {
+            font-size: 5rem;
+            background: linear-gradient(135deg, #FFD700 0%, #FF8800 50%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: float-icon 4s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        @keyframes float-icon {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        .empty-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #FFD700;
+            border-radius: 50%;
+            opacity: 0;
+            animation: particle-float 4s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) {
+            left: 20%;
+            animation-delay: 0s;
+        }
+
+        .particle:nth-child(2) {
+            left: 40%;
+            animation-delay: 0.5s;
+        }
+
+        .particle:nth-child(3) {
+            left: 60%;
+            animation-delay: 1s;
+        }
+
+        .particle:nth-child(4) {
+            left: 80%;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes particle-float {
+            0% {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+        }
+
+        /* =========================================
+           LOADER ANIMATION
+           ========================================= */
         .loader {
-            border-top-color: #3b82f6;
-            -webkit-animation: spinner 1.5s linear infinite;
-            animation: spinner 1.5s linear infinite;
+            border-top-color: #60A5FA !important;
+            animation: spinner 1s linear infinite;
         }
 
         @keyframes spinner {
@@ -68,14 +408,97 @@
             }
         }
 
-        /* Glass/Modal Effect */
-        .glass-panel {
-            background: rgba(30, 41, 59, 0.7);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        /* =========================================
+           RESULT CARD PREMIUM
+           ========================================= */
+        .result-card {
+            background: linear-gradient(135deg,
+                    rgba(20, 20, 25, 0.95) 0%,
+                    rgba(25, 25, 35, 0.9) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
         }
 
+        .result-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #60A5FA, #A78BFA, #EC4899);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .result-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(167, 139, 250, 0.25);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .result-card:hover::before {
+            opacity: 1;
+        }
+
+        /* =========================================
+           STATS BADGE
+           ========================================= */
+        .stat-badge {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15), rgba(255, 136, 0, 0.1));
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 8px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #FFD700;
+        }
+
+        .stat-badge-viral {
+            background: linear-gradient(135deg, rgba(255, 75, 75, 0.2), rgba(255, 107, 53, 0.15));
+            border-color: rgba(255, 75, 75, 0.3);
+            color: #FF6B35;
+        }
+
+        /* =========================================
+           REGION TOGGLE
+           ========================================= */
+        .region-toggle {
+            background: rgba(15, 15, 20, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            display: inline-flex;
+        }
+
+        .region-btn {
+            padding: 8px 16px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.5);
+            background: transparent;
+            border: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .region-btn.active {
+            background: linear-gradient(135deg, #FFD700, #FF8800);
+            color: #000;
+            font-weight: 700;
+        }
+
+        .region-btn:hover:not(.active) {
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* =========================================
+           MARKDOWN BODY
+           ========================================= */
         .markdown-body h1 {
             font-size: 1.5em;
             font-weight: bold;
@@ -88,8 +511,8 @@
             font-weight: bold;
             margin-top: 1em;
             margin-bottom: 0.5em;
-            color: #a78bfa;
-            border-bottom: 1px solid #334155;
+            color: #FFD700;
+            border-bottom: 1px solid rgba(255, 215, 0, 0.2);
             padding-bottom: 0.2em;
         }
 
@@ -98,63 +521,131 @@
             font-weight: bold;
             margin-top: 0.8em;
             margin-bottom: 0.4em;
-            color: #60a5fa;
+            color: #00FFc8;
+        }
+
+        .markdown-body ul,
+        .markdown-body ol {
+            padding-left: 1.5em;
+            margin-bottom: 1em;
+            color: rgba(255, 255, 255, 0.7);
         }
 
         .markdown-body ul {
             list-style-type: disc;
-            padding-left: 1.5em;
-            margin-bottom: 1em;
-            color: #cbd5e1;
         }
 
         .markdown-body ol {
             list-style-type: decimal;
-            padding-left: 1.5em;
-            margin-bottom: 1em;
-            color: #cbd5e1;
         }
 
         .markdown-body strong {
-            color: #f1f5f9;
+            color: #fff;
         }
 
         .markdown-body p {
             margin-bottom: 0.8em;
             line-height: 1.6;
-            color: #cbd5e1;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* =========================================
+           FILTER LABEL
+           ========================================= */
+        .filter-label {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-label i {
+            color: inherit;
+        }
+
+        /* =========================================
+           SLIDER CUSTOM
+           ========================================= */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            height: 6px;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: linear-gradient(135deg, #FFD700, #FF8800);
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+            transition: transform 0.2s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        /* =========================================
+           CONTAINER RELATIVE
+           ========================================= */
+        .main-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Glass Panel Legacy Support */
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
     </style>
 </head>
 
 <body class="bg-slate-900 text-slate-100 min-h-screen font-sans antialiased selection:bg-blue-500 selection:text-white">
 
+    <!-- Aurora Background -->
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-mint"></div>
+        <div class="aurora-orb aurora-purple"></div>
+        <div class="aurora-orb aurora-gold"></div>
+    </div>
+
     <!-- Container -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="main-container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
         <!-- Header -->
-        <header class="text-center mb-10">
-            <h1
-                class="text-3xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 mb-2 tracking-tight">
+        <header class="text-center mb-12">
+            <h1 class="neon-title text-4xl md:text-6xl font-black mb-3 tracking-tight">
                 유튜브 떡상채널 분석기
             </h1>
-            <p class="text-slate-400 text-sm md:text-base">저평가된 대박 영상을 찾아내고 AI로 인사이트를 분석하세요.</p>
+            <p class="text-gray-400 text-sm md:text-base max-w-lg mx-auto">저평가된 대박 영상을 찾아내고 AI로 인사이트를 분석하세요.</p>
         </header>
 
         <!-- Search Section -->
-        <div class="glass-panel rounded-xl p-6 mb-8 shadow-lg">
+        <div class="premium-glass p-6 mb-8 shadow-2xl">
             <div class="flex flex-col md:flex-row gap-4 mb-4">
                 <div class="flex-grow relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-slate-500"></i>
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <circle cx="11" cy="11" r="8" stroke-width="2" />
+                            <path stroke-linecap="round" stroke-width="2.5" d="m21 21-4.35-4.35" />
+                        </svg>
                     </div>
                     <input type="text" id="searchInput"
-                        class="w-full pl-10 pr-4 py-3 bg-slate-800 border border-slate-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-white placeholder-slate-500 transition-all"
+                        class="glow-input w-full pl-12 pr-4 py-4 text-white placeholder-gray-500 transition-all"
                         placeholder="검색할 키워드를 입력하세요 (예: AI 뉴스, 주식 전망, 운동 루틴...)"
                         onkeypress="if(event.key === 'Enter') handleSearch()">
                 </div>
                 <button onclick="handleSearch()"
-                    class="px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-semibold rounded-lg shadow-md transition-all transform hover:scale-105 active:scale-95 flex items-center justify-center min-w-[120px]">
+                    class="premium-btn-primary flex items-center justify-center min-w-[140px]">
                     <span id="searchBtnText">검색</span>
                     <div id="searchLoader"
                         class="loader ease-linear rounded-full border-2 border-t-2 border-gray-200 h-5 w-5 ml-2 hidden">
@@ -163,29 +654,23 @@
             </div>
 
             <!-- Row 1: TOP Buttons + Region -->
-            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-slate-700/50">
+            <div class="flex flex-wrap items-center gap-3 pt-4 border-t border-white/10">
                 <!-- TOP Buttons -->
                 <div class="flex items-center gap-2">
-                    <button onclick="handleTop10()"
-                        class="px-4 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-white text-sm font-bold rounded-md shadow-md transition-all flex items-center">
+                    <button onclick="handleTop10()" class="premium-btn-secondary flex items-center text-sm">
                         <i class="fas fa-trophy mr-2"></i>TOP 10
                     </button>
-                    <button onclick="handleTop100()"
-                        class="px-4 py-1.5 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-400 hover:to-pink-500 text-white text-sm font-bold rounded-md shadow-md transition-all flex items-center">
+                    <button onclick="handleTop100()" class="premium-btn-accent flex items-center text-sm">
                         <i class="fas fa-crown mr-2"></i>TOP 100
                     </button>
                 </div>
 
                 <!-- Region Toggle -->
                 <div class="flex items-center space-x-2">
-                    <span class="text-sm text-slate-400 font-medium"><i class="fas fa-globe mr-1"></i>지역:</span>
-                    <div class="flex bg-slate-800 rounded-md border border-slate-700 overflow-hidden">
-                        <button id="regionKR" onclick="setRegion('KR')"
-                            class="px-3 py-1.5 text-sm font-medium bg-blue-600 text-white transition-colors">🇰🇷
-                            한국</button>
-                        <button id="regionGB" onclick="setRegion('GB')"
-                            class="px-3 py-1.5 text-sm font-medium text-slate-400 hover:text-white transition-colors">🌍
-                            해외</button>
+                    <span class="filter-label"><i class="fas fa-globe"></i>지역:</span>
+                    <div class="region-toggle">
+                        <button id="regionKR" onclick="setRegion('KR')" class="region-btn active">🇰🇷 한국</button>
+                        <button id="regionGB" onclick="setRegion('GB')" class="region-btn">🌍 해외</button>
                     </div>
                 </div>
 
@@ -199,13 +684,11 @@
             </div>
 
             <!-- Row 2: Duration / Date / Channel Scale -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-slate-700/50 mt-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4 border-t border-white/10 mt-4">
                 <!-- Duration Filter -->
                 <div class="flex items-center space-x-2">
-                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
-                            class="fas fa-clock mr-1"></i>영상 길이:</span>
-                    <select id="durationFilter"
-                        class="bg-slate-800 text-slate-200 text-sm rounded-md border border-slate-700 px-3 py-1.5 focus:outline-none focus:border-blue-500 flex-grow">
+                    <span class="filter-label whitespace-nowrap"><i class="fas fa-clock"></i>영상 길이:</span>
+                    <select id="durationFilter" class="premium-select flex-grow text-sm">
                         <option value="any">모두 보기</option>
                         <option value="short">숏폼 (3분 미만)</option>
                         <option value="medium">일반 (4~20분)</option>
@@ -215,10 +698,8 @@
 
                 <!-- Date Filter -->
                 <div class="flex items-center space-x-2">
-                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
-                            class="fas fa-calendar-alt mr-1"></i>기간:</span>
-                    <select id="dateFilter"
-                        class="bg-slate-800 text-slate-200 text-sm rounded-md border border-slate-700 px-3 py-1.5 focus:outline-none focus:border-blue-500 flex-grow">
+                    <span class="filter-label whitespace-nowrap"><i class="fas fa-calendar-alt"></i>기간:</span>
+                    <select id="dateFilter" class="premium-select flex-grow text-sm">
                         <option value="any">전체 기간</option>
                         <option value="today">오늘 (24시간)</option>
                         <option value="week">이번 주</option>
@@ -229,31 +710,31 @@
 
                 <!-- Channel Scale Filter -->
                 <div class="flex items-center space-x-2">
-                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
-                            class="fas fa-user-friends mr-1"></i>채널 규모:</span>
-                    <select id="channelFilter"
-                        class="bg-slate-800 text-slate-200 text-sm rounded-md border border-slate-700 px-3 py-1.5 focus:outline-none focus:border-blue-500 flex-grow">
+                    <span class="filter-label whitespace-nowrap"><i class="fas fa-user-friends"></i>채널 규모:</span>
+                    <select id="channelFilter" class="premium-select flex-grow text-sm">
                         <option value="all">모든 채널</option>
-                        <option value="new">신규 채널 (1년 미만)</option>
-                        <option value="micro">마이크로 (구독자 1만 미만)</option>
-                        <option value="small">성장형 (구독자 5만 미만)</option>
-                        <option value="viral">떡상형 (구독자 10만 미만)</option>
+                        <option value="new">풋내기형 (1천명 이하)</option>
+                        <option value="micro">성장형 (1만명 이하)</option>
+                        <option value="small">준떡상형 (5만명 이하)</option>
+                        <option value="viral">떡상형 (10만명 이하)</option>
                     </select>
                 </div>
             </div>
 
             <!-- Viral Ratio Slider -->
-            <div class="pt-4 border-t border-slate-700/50 mt-4">
+            <div class="pt-4 border-t border-white/10 mt-4">
                 <div class="flex items-center space-x-3">
-                    <span class="text-sm text-slate-400 font-medium whitespace-nowrap"><i
-                            class="fas fa-chart-line mr-1"></i>떡상 측정도:</span>
+                    <span class="filter-label whitespace-nowrap"><i class="fas fa-chart-line text-yellow-400"></i>떡상
+                        측정도:</span>
                     <input type="range" id="ratioRange" min="0" max="500" value="0" step="10"
-                        class="flex-grow h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer">
-                    <span id="ratioValue" class="text-sm font-bold text-blue-400 w-16 text-right">0%</span>
+                        class="flex-grow cursor-pointer">
+                    <span id="ratioValue" class="text-sm font-bold text-yellow-400 w-16 text-right">0%</span>
                 </div>
-                <div id="ratioExplanation" class="mt-2 text-xs text-slate-500 bg-slate-800/50 rounded px-3 py-2">
-                    <i class="fas fa-info-circle mr-1"></i>현재 설정: <strong class="text-blue-400">모든 영상</strong> 표시 중
-                    <span class="text-slate-600 ml-2">| 떡상도 = (조회수 ÷ 구독자수) × 100</span>
+                <div id="ratioExplanation"
+                    class="mt-2 text-xs text-gray-500 bg-white/5 rounded-lg px-4 py-2 border border-white/5">
+                    <i class="fas fa-info-circle mr-1"></i>현재 설정: <strong class="text-white">모든
+                        영상</strong> 표시 중
+                    <span class="text-gray-600 ml-2">| 떡상도 = (조회수 ÷ 구독자수) × 100</span>
                 </div>
             </div>
         </div>
@@ -262,13 +743,12 @@
         <details class="mb-8 group" open>
             <summary
                 class="flex items-center cursor-pointer text-slate-400 hover:text-white transition-colors text-sm select-none">
-                <i class="fas fa-key mr-2 text-yellow-400"></i> <span class="text-yellow-400 font-bold">API 키 설정
+                <i class="fas fa-key mr-2 text-yellow-400"></i> <span class="text-yellow-400 font-bold">YouTube API Key
                     (필수)</span>
             </summary>
             <div class="mt-4 glass-panel p-4 rounded-lg border border-yellow-500/30">
                 <div>
                     <div class="flex justify-between items-center mb-1">
-                        <label class="text-xs font-semibold text-yellow-400">🔑 YouTube API Key (필수)</label>
                         <a href="https://console.cloud.google.com/apis/credentials" target="_blank"
                             class="text-xs text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1">
                             <i class="fas fa-external-link-alt"></i> YouTube API 발급
@@ -304,9 +784,16 @@
         </div>
 
         <!-- Empty State / Initial -->
-        <div id="emptyState" class="text-center py-20 text-slate-600">
-            <i class="fab fa-youtube text-6xl mb-4 opacity-20"></i>
-            <p>키워드를 입력하고 검색을 시작해보세요.</p>
+        <div id="emptyState" class="empty-state">
+            <div class="empty-particles">
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+                <div class="particle"></div>
+            </div>
+            <i class="fab fa-youtube empty-icon mb-6"></i>
+            <p class="text-gray-400 text-lg">키워드를 입력하고 검색을 시작해보세요.</p>
+            <p class="text-gray-600 text-sm mt-2">AI가 떡상 가능성이 높은 영상을 찾아드립니다 🚀</p>
         </div>
 
     </div>
@@ -635,15 +1122,11 @@
             const krBtn = document.getElementById('regionKR');
             const gbBtn = document.getElementById('regionGB');
             if (code === 'KR') {
-                krBtn.classList.add('bg-blue-600', 'text-white');
-                krBtn.classList.remove('text-slate-400');
-                gbBtn.classList.remove('bg-blue-600', 'text-white');
-                gbBtn.classList.add('text-slate-400');
+                krBtn.classList.add('active');
+                gbBtn.classList.remove('active');
             } else {
-                gbBtn.classList.add('bg-blue-600', 'text-white');
-                gbBtn.classList.remove('text-slate-400');
-                krBtn.classList.remove('bg-blue-600', 'text-white');
-                krBtn.classList.add('text-slate-400');
+                gbBtn.classList.add('active');
+                krBtn.classList.remove('active');
             }
         }
 
@@ -899,10 +1382,10 @@
                 searchResults = tempResults.filter(item => {
                     if (item.ratio < minRatio) return false;
 
-                    const isNew = item.channelAge <= 12;
-                    const isMicro = item.subs < 10000;
-                    const isSmall = item.subs < 50000;
-                    const isViral = item.subs < 100000;
+                    const isNew = item.subs <= 1000;       // 풋내기형: 1천명 이하
+                    const isMicro = item.subs <= 10000;    // 성장형: 1만명 이하
+                    const isSmall = item.subs <= 50000;    // 준떡상형: 5만명 이하
+                    const isViral = item.subs <= 100000;   // 떡상형: 10만명 이하
 
                     if (channelScale === 'new' && !isNew) return false;
                     if (channelScale === 'micro' && !isMicro) return false;

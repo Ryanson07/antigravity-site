@@ -4,12 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AntiGravity - AI 기반 크리에이터 도구 모음">
-    <title>AIMOTION</title>
+    <meta name="description" content="AIMOTION - AI 기반 크리에이터 도구 모음. AI영상제작, 유튜브 수익화, 프롬프트 제공">
+    <meta name="theme-color" content="#030305">
+    <title>AIMOTION - AI Creative Studio</title>
+
+    <!-- Premium Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=Fira+Code:wght@400;500&display=swap"
         rel="stylesheet">
+
     <link rel="stylesheet" href="styles.css">
     <script src="https://unpkg.com/lucide@latest"></script>
 </head>
@@ -17,6 +22,13 @@
 <body>
     <!-- Global Background: Deep Space -->
     <div class="global-background"></div>
+
+    <!-- Floating Geometric Shapes -->
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
 
     <!-- 메인 랜딩 페이지 -->
     <div class="landing-container">
@@ -31,147 +43,199 @@
             </nav>
         </header>
 
-        <!-- 히어로 섹션 (Spline Background + AIMOTION) -->
+        <!-- 히어로 섹션 (Cyberpunk Background + Spline 3D Robot) -->
         <section class="hero-section">
-            <!-- Unicorn Studio Embed (User Provided) -->
-            <div data-us-project="13kI82ovQsrz6ZvmRr2P" class="unicorn-background"
-                style="width:100% !important; height: 100% !important;"></div>
+            <!-- Custom Cyberpunk Background (replaces Unicorn Studio) -->
+            <!-- Initialized by cyberpunk-bg.js -->
 
             <div class="spline-background">
-                <!-- Spline iframe embedded directly -->
-                <iframe src="https://my.spline.design/genkubgreetingrobot-yPPeDpU7QQxMrJN4rdyeO8Vd/" frameborder="0"
-                    width="100%" height="100%"></iframe>
+                <!-- New Spline 3D Web Diagram -->
+                <iframe src="https://my.spline.design/webdiagram-P8894mXT0rB9RmzAEVmNKLUG/" frameborder="0" width="100%"
+                    height="100%" style="pointer-events: auto;"></iframe>
                 <!-- Logo Blocker -->
                 <div class="spline-logo-blocker"
                     style="position: absolute; bottom: 10px; right: 10px; width: 140px; height: 50px; background: #030305; z-index: 5;">
                 </div>
             </div>
             <div class="hero-content">
-                <h1 class="hero-title">AIMOTION</h1>
-                <p class="hero-subtitle">AI영상제작, 유튜브 수익화, 프롬프트 제공</p>
-                <a href="#tools" class="hero-cta">
-                    시작하기 <i data-lucide="arrow-right"></i>
-                </a>
+                <h1 class="hero-title heading-display">AIMOTION</h1>
+            </div>
+
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+                <span>Scroll</span>
             </div>
         </section>
 
         <!-- Tools & Workflow Section -->
         <section id="tools" class="grid-section">
-            <div class="section-header">
-                <h2 class="section-title">Workflow. <span class="text-gradient">Evolved.</span></h2>
+            <div class="section-header reveal">
+                <h2 class="section-title heading-display">Workflow. <span class="text-gradient-gold">Evolved.</span>
+                </h2>
                 <p class="section-subtitle">AI를 활용한 창의적인 프로세스</p>
             </div>
 
             <div class="workflow-container">
                 <!-- Left: Feature Grid -->
                 <div class="feature-grid">
-                    <!-- Main Feature: YouTube Analysis -->
-                    <a href="유튜브 추출기/index.html" class="grid-card main-card tool-analyze-bg" target="_blank"
-                        style="position:relative; overflow:hidden;">
+                    <!-- Main Feature: YouTube Analysis - PREMIUM REDESIGN -->
+                    <a href="유튜브 추출기/index.html" class="grid-card main-card youtube-analysis-card" target="_blank">
                         <div class="card-glow-effect"></div>
-                        <!-- Background Image -->
-                        <img src="images/Analyze YouTube Channel.png" alt="Analyze YouTube Channel"
-                            style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: 0; opacity: 0.6;">
-                        <div class="card-content"
-                            style="position:relative; z-index:1; color: #ffffff; text-shadow: 0 2px 8px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5);">
-                            <h3 class="card-heading" style="color: #ffffff; -webkit-text-fill-color: #ffffff;">Analyze.
-                                <br>YouTube. <br>Channel.
+                        <!-- Background Image Layer -->
+                        <div class="card-bg-image"
+                            style="background-image: url('images/Analyze YouTube Channel V2.png');"></div>
+                        <!-- Animated Gradient Background -->
+                        <div class="card-animated-bg"></div>
+                        <!-- Grid Pattern Overlay -->
+                        <div class="card-grid-pattern"></div>
+                        <!-- Floating Data Elements -->
+                        <div class="floating-data">
+                            <span class="data-tag">▲ 156%</span>
+                            <span class="data-tag secondary">2.4M</span>
+                            <span class="data-tag accent">VIRAL</span>
+                        </div>
+                        <div class="card-content">
+                            <div class="card-icon-wrapper">
+                                <i data-lucide="trending-up" class="card-icon"></i>
+                            </div>
+                            <h3 class="card-heading premium-heading">
+                                <span class="heading-line">Analyze.</span>
+                                <span class="heading-line gradient">YouTube.</span>
+                                <span class="heading-line">Channel.</span>
                             </h3>
+                            <p class="card-description">AI 기반 채널 분석으로 떡상 채널 인사이트 확보</p>
                             <div class="card-footer">
-                                <span class="feature-name" style="color: #ffffff;">Analyze YouTube 떡상채널</span>
-                                <i data-lucide="arrow-up-right" class="icon-arrow"></i>
+                                <span class="feature-name">분석 시작하기</span>
+                                <div class="arrow-circle">
+                                    <i data-lucide="arrow-up-right" class="icon-arrow"></i>
+                                </div>
                             </div>
                         </div>
                     </a>
 
                     <!-- Sub Features Row -->
                     <div class="sub-grid">
-                        <!-- Sub Feature 1: Comment Analysis (Premium Mock UI) -->
-                        <div class="grid-card sub-card comment-card-premium">
+                        <!-- Sub Feature 1: Comment Analysis - PREMIUM REDESIGN -->
+                        <div class="grid-card sub-card comment-analysis-card">
                             <div class="card-glow-effect"></div>
+                            <!-- Glassmorphism overlay -->
+                            <div class="glass-overlay"></div>
                             <div class="card-content">
-                                <!-- Nano Banana Pro Style Comment List -->
-                                <div class="mock-comment-list">
-                                    <div class="mock-comment-item">
-                                        <div class="mock-avatar"></div>
-                                        <div class="mock-text-group">
-                                            <div class="mock-user">User123</div>
-                                            <div class="mock-line long"></div>
-                                        </div>
-                                        <div class="mock-sentiment positive">+98%</div>
+                                <!-- Premium Sentiment Visualization -->
+                                <div class="sentiment-visualization">
+                                    <div class="sentiment-ring">
+                                        <svg viewBox="0 0 100 100">
+                                            <circle class="ring-bg" cx="50" cy="50" r="40" />
+                                            <circle class="ring-progress" cx="50" cy="50" r="40" />
+                                        </svg>
+                                        <span class="sentiment-value">87%</span>
+                                        <span class="sentiment-label">긍정적</span>
                                     </div>
-                                    <div class="mock-comment-item">
-                                        <div class="mock-avatar"></div>
-                                        <div class="mock-text-group">
-                                            <div class="mock-user">Creator_Fan</div>
-                                            <div class="mock-line medium"></div>
+                                    <div class="comment-stats">
+                                        <div class="stat-item">
+                                            <span class="stat-value">1.2K</span>
+                                            <span class="stat-label">분석 댓글</span>
                                         </div>
-                                        <div class="mock-sentiment neutral">45%</div>
-                                    </div>
-                                    <div class="mock-comment-item">
-                                        <div class="mock-avatar"></div>
-                                        <div class="mock-text-group">
-                                            <div class="mock-user">New_Sub</div>
-                                            <div class="mock-line short"></div>
+                                        <div class="stat-item">
+                                            <span class="stat-value">24</span>
+                                            <span class="stat-label">키워드</span>
                                         </div>
-                                        <div class="mock-sentiment positive">+100%</div>
                                     </div>
                                 </div>
-
-                                <div class="card-footer" style="margin-top: 45px;">
-                                    <span class="feature-name">YouTube 댓글 분석기</span>
-                                    <span class="status-badge"
-                                        style="font-size: 0.7rem; background: var(--accent-primary); color:#000; padding: 2px 6px; border-radius: 4px; font-weight:700;">COMING
-                                        SOON</span>
+                                <div class="card-footer comment-card-footer">
+                                    <span class="feature-name">댓글 분석기</span>
+                                    <span class="status-badge coming-soon">COMING SOON</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Sub Feature 2: Tool Palette -->
-                        <div class="grid-card sub-card">
+                        <!-- Sub Feature 2: Tool Palette - Enhanced Design -->
+                        <div class="grid-card sub-card tool-palette-card">
                             <div class="card-glow-effect"></div>
+                            <div class="tool-palette-header">
+                                <span class="tool-palette-label">AI Tools</span>
+                            </div>
                             <div class="card-content column-content">
                                 <div class="tool-list-item">
-                                    <i data-lucide="file-text"></i>
-                                    <span>Script Writer</span>
+                                    <div class="tool-icon-wrapper">
+                                        <i data-lucide="file-text"></i>
+                                    </div>
+                                    <div class="tool-info">
+                                        <span class="tool-name">Script Writer</span>
+                                        <span class="tool-desc">AI 대본 작성</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="tool-arrow"></i>
                                 </div>
                                 <div class="tool-list-item">
-                                    <i data-lucide="image"></i>
-                                    <span>Thumbnail</span>
+                                    <div class="tool-icon-wrapper">
+                                        <i data-lucide="image"></i>
+                                    </div>
+                                    <div class="tool-info">
+                                        <span class="tool-name">Thumbnail</span>
+                                        <span class="tool-desc">썸네일 생성</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="tool-arrow"></i>
                                 </div>
                                 <div class="tool-list-item">
-                                    <i data-lucide="mic"></i>
-                                    <span>Voice Clone</span>
+                                    <div class="tool-icon-wrapper">
+                                        <i data-lucide="mic"></i>
+                                    </div>
+                                    <div class="tool-info">
+                                        <span class="tool-name">Voice Clone</span>
+                                        <span class="tool-desc">AI 보이스 복제</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="tool-arrow"></i>
+                                </div>
+                                <div class="tool-list-item">
+                                    <div class="tool-icon-wrapper">
+                                        <i data-lucide="music"></i>
+                                    </div>
+                                    <div class="tool-info">
+                                        <span class="tool-name">BGM Generator</span>
+                                        <span class="tool-desc">AI 배경음악</span>
+                                    </div>
+                                    <i data-lucide="chevron-right" class="tool-arrow"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Sub Feature 3: Video Production (Expanded to Main Card width) -->
-                    <a href="https://aifi.ai.kr/" class="grid-card main-card video-card-wide" target="_blank"
-                        style="border-color: var(--accent-primary); position: relative; overflow: hidden;">
-
-                        <!-- Background Image -->
-                        <img src="images/영상 제작하기.png" alt="Video Production"
-                            style="position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; z-index: 0; opacity: 0.7;">
-
+                    <!-- Sub Feature 3: Video Production - PREMIUM REDESIGN -->
+                    <a href="https://aifi.ai.kr/" class="grid-card main-card video-production-card" target="_blank">
                         <div class="card-glow-effect"></div>
-                        <div class="card-content"
-                            style="display:flex; flex-direction:row; align-items:center; justify-content:space-between; height:100%; position: relative; z-index: 1;">
-                            <div
-                                style="text-align:left; text-shadow: 0 2px 8px rgba(0,0,0,0.7), 0 0 20px rgba(0,0,0,0.5);">
-                                <h4 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 8px;">
-                                    영상 제작하기</h4>
-                                <p style="font-size: 1rem; color: #ddd;">
-                                    AI 영화/CF/뮤비 제작을 시작하세요</p>
-                            </div>
-                            <div style="display:flex; align-items:center; gap:15px;">
-                                <i data-lucide="clapperboard"
-                                    style="width: 40px; height: 40px; color: var(--accent-primary);"></i>
-                                <div
-                                    style="background:var(--accent-primary); color:#000; padding:8px 20px; border-radius:4px; font-weight:700; display:flex; align-items:center; gap:5px;">
-                                    Start <i data-lucide="arrow-right" style="width:16px;"></i>
+                        <!-- Animated Gradient Background -->
+                        <div class="video-card-bg">
+                            <div class="gradient-orb orb-1"></div>
+                            <div class="gradient-orb orb-2"></div>
+                        </div>
+                        <!-- Film Strip Decoration -->
+                        <div class="film-strip-decoration">
+                            <div class="film-frame"></div>
+                            <div class="film-frame"></div>
+                            <div class="film-frame"></div>
+                            <div class="film-frame"></div>
+                        </div>
+                        <div class="card-content video-card-content-redesign">
+                            <div class="video-card-top">
+                                <div class="video-card-badge-minimal">
+                                    <i data-lucide="sparkles"></i>
+                                    <span>AI Powered</span>
                                 </div>
+                                <div class="video-icons-minimal">
+                                    <i data-lucide="film" class="video-icon-sm"></i>
+                                    <i data-lucide="clapperboard" class="video-icon-sm"></i>
+                                    <i data-lucide="play-circle" class="video-icon-sm"></i>
+                                </div>
+                            </div>
+                            <div class="video-card-middle">
+                                <h4 class="video-card-title-lg">영상 제작하기</h4>
+                                <p class="video-card-desc-sm">AI 영화 · CF · 뮤직비디오 제작</p>
+                            </div>
+                            <!-- Start Creating 버튼 - 오른쪽 하단으로 이동 -->
+                            <div class="start-btn-minimal">
+                                <span>Start Creating</span>
+                                <i data-lucide="arrow-right"></i>
                             </div>
                         </div>
                     </a>
@@ -299,10 +363,7 @@
     <script>
         lucide.createIcons();
     </script>
-    <!-- Unicorn Studio Script -->
-    <script type="text/javascript">
-        !function () { if (!window.UnicornStudio) { window.UnicornStudio = { isInitialized: !1 }; var i = document.createElement("script"); i.src = "https://cdn.jsdelivr.net/gh/hiunicornstudio/unicornstudio.js@v2.0.2/dist/unicornStudio.umd.js", i.onload = function () { window.UnicornStudio.isInitialized || (UnicornStudio.init(), window.UnicornStudio.isInitialized = !0) }, (document.head || document.body).appendChild(i) } }();
-    </script>
+    <!-- Cyberpunk Background Animation - Disabled for new Spline design -->
     <!-- Main Logic -->
     <script src="main.js"></script>
 </body>

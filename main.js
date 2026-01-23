@@ -138,6 +138,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    console.log('✨ AIMOTION Premium Theme Loaded v2.0');
+    // ✨ AIMOTION Premium Theme Loaded v2.0
 });
 

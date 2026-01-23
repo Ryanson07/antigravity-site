@@ -22,14 +22,8 @@
             }
         }
     </script>
-    <!-- Import Map for Google Generative AI -->
-    <script type="importmap">
-      {
-        "imports": {
-          "@google/generative-ai": "https://esm.run/@google/generative-ai"
-        }
-      }
-    </script>
+    <!-- Note: Import Map removed for Safari compatibility -->
+    <!-- If @google/generative-ai is needed, load via CDN script tag instead -->
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -763,10 +757,16 @@
                             적용
                         </button>
                     </div>
-                    <div id="apiKeyDoneMsg" class="hidden flex items-center text-green-400 font-bold text-sm h-[38px]">
-                        <i class="fas fa-check-circle mr-2"></i> 완료
+                    <div id="apiKeyDoneMsg" class="hidden flex items-center gap-3 h-[38px]">
+                        <span class="text-green-400 font-bold text-sm flex items-center">
+                            <i class="fas fa-check-circle mr-2"></i> API 키 적용됨
+                        </span>
+                        <button onclick="releaseApiKey()"
+                            class="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/40 text-red-400 font-semibold rounded text-xs border border-red-500/30 transition-all">
+                            <i class="fas fa-times mr-1"></i>해제
+                        </button>
                     </div>
-                    <p class="text-xs text-slate-500 mt-1">API 키는 로컬에서만 사용되며 저장되지 않습니다.</p>
+                    <p class="text-xs text-slate-500 mt-1">API 키는 브라우저에 저장되며, 해제 버튼을 눌러야 삭제됩니다.</p>
                 </div>
             </div>
         </details>
@@ -1015,6 +1015,7 @@
         // Initialize on Load
         document.addEventListener('DOMContentLoaded', () => {
             initUI();
+            loadSavedApiKey(); // Load saved API key from localStorage
         });
 
         function initUI() {
@@ -1131,7 +1132,7 @@
         }
 
         // ==========================================
-        // API KEY UI
+        // API KEY UI (with localStorage persistence)
         // ==========================================
         function applyApiKey() {
             const keyInput = document.getElementById('uiYoutubeKey');
@@ -1140,10 +1141,52 @@
                 return;
             }
 
+            // Save to localStorage
+            try {
+                localStorage.setItem('youtube_api_key', keyInput.value.trim());
+            } catch (e) {
+                // localStorage not available (private mode, etc.)
+            }
+
             // UI Toggle
             document.getElementById('apiKeyInputContainer').classList.add('hidden');
             document.getElementById('apiKeyDoneMsg').classList.remove('hidden');
-            showToast('API 키가 적용되었습니다.', 'success');
+            showToast('API 키가 저장되었습니다.', 'success');
+        }
+
+        function releaseApiKey() {
+            // Remove from localStorage
+            try {
+                localStorage.removeItem('youtube_api_key');
+            } catch (e) {
+                // localStorage not available
+            }
+
+            // Clear input
+            const keyInput = document.getElementById('uiYoutubeKey');
+            if (keyInput) keyInput.value = '';
+
+            // UI Toggle - show input, hide done message
+            document.getElementById('apiKeyInputContainer').classList.remove('hidden');
+            document.getElementById('apiKeyDoneMsg').classList.add('hidden');
+            showToast('API 키가 해제되었습니다.', 'info');
+        }
+
+        function loadSavedApiKey() {
+            try {
+                const savedKey = localStorage.getItem('youtube_api_key');
+                if (savedKey) {
+                    const keyInput = document.getElementById('uiYoutubeKey');
+                    if (keyInput) {
+                        keyInput.value = savedKey;
+                        // Auto-apply UI
+                        document.getElementById('apiKeyInputContainer').classList.add('hidden');
+                        document.getElementById('apiKeyDoneMsg').classList.remove('hidden');
+                    }
+                }
+            } catch (e) {
+                // localStorage not available
+            }
         }
 
         // ==========================================

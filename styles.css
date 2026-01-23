@@ -2286,9 +2286,9 @@ body {
 /* Mobile (768px 이하) - Spline 전체 화면 최적화 */
 @media (max-width: 768px) {
     .spline-background {
-        width: 220%;
-        height: 220%;
-        transform: translate(-50%, -50%) scale(0.5);
+        width: 180%;
+        height: 180%;
+        transform: translate(-50%, -50%) scale(0.75);
         transform-origin: center center;
     }
 

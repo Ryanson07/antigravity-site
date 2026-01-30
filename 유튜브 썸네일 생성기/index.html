@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유튜브 썸네일 프롬프트 생성기 - AIMOTION</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* =========================================
+           PREMIUM DESIGN SYSTEM - AMBER/GOLD THEME
+           ========================================= */
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #0a0a0c;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #F59E0B, #D97706);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(180deg, #FBBF24, #F59E0B);
+        }
+
+        /* Base Body Override */
+        body {
+            background: #0a0a0c !important;
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* =========================================
+           AURORA BACKGROUND - WARM AMBER
+           ========================================= */
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .aurora-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.4;
+            animation: aurora-float 20s ease-in-out infinite;
+        }
+
+        .aurora-amber {
+            width: 550px;
+            height: 550px;
+            background: radial-gradient(circle, rgba(245, 158, 11, 0.5) 0%, transparent 70%);
+            top: -180px;
+            left: -120px;
+            animation-delay: 0s;
+        }
+
+        .aurora-orange {
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(249, 115, 22, 0.35) 0%, transparent 70%);
+            top: 40%;
+            right: -180px;
+            animation-delay: -7s;
+        }
+
+        .aurora-gold {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(251, 191, 36, 0.25) 0%, transparent 70%);
+            bottom: -80px;
+            left: 40%;
+            animation-delay: -14s;
+        }
+
+        @keyframes aurora-float {
+
+            0%,
+            100% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            25% {
+                transform: translate(30px, -20px) scale(1.05);
+            }
+
+            50% {
+                transform: translate(-20px, 30px) scale(0.95);
+            }
+
+            75% {
+                transform: translate(-30px, -10px) scale(1.02);
+            }
+        }
+
+        /* =========================================
+           NEON GLOW TITLE - AMBER GRADIENT
+           ========================================= */
+        .neon-title {
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 40%, #D97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(245, 158, 11, 0.3);
+        }
+
+        /* =========================================
+           PREMIUM GLASS PANEL - REFINED
+           ========================================= */
+        .premium-glass {
+            background: linear-gradient(145deg,
+                    rgba(18, 18, 22, 0.95) 0%,
+                    rgba(24, 24, 30, 0.9) 100%);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(245, 158, 11, 0.08);
+            border-radius: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.03);
+        }
+
+        .premium-glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent,
+                    rgba(251, 191, 36, 0.5),
+                    rgba(245, 158, 11, 0.5),
+                    transparent);
+        }
+
+        .premium-glass:hover {
+            border-color: rgba(245, 158, 11, 0.15);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(245, 158, 11, 0.05),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        /* =========================================
+           GLOW INPUT - REFINED
+           ========================================= */
+        .glow-input {
+            background: rgba(12, 12, 16, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            color: #fff;
+            transition: all 0.3s ease;
+            font-size: 15px;
+        }
+
+        .glow-input:focus {
+            outline: none;
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow:
+                0 0 0 3px rgba(245, 158, 11, 0.08),
+                0 0 20px rgba(245, 158, 11, 0.1);
+            background: rgba(15, 15, 20, 1);
+        }
+
+        .glow-input::placeholder {
+            color: rgba(255, 255, 255, 0.35);
+        }
+
+        /* =========================================
+           PREMIUM SELECT - REFINED
+           ========================================= */
+        .premium-select {
+            background: rgba(12, 12, 16, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            color: #fff;
+            padding: 14px 18px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23FBBF24'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 18px;
+            padding-right: 44px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .premium-select:focus {
+            outline: none;
+            border-color: rgba(245, 158, 11, 0.5);
+            box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.08);
+        }
+
+        .premium-select:hover {
+            border-color: rgba(245, 158, 11, 0.3);
+        }
+
+        .premium-select option {
+            background: #16161a;
+            color: #fff;
+            padding: 12px;
+        }
+
+        /* =========================================
+           PREMIUM BUTTON - AMBER GRADIENT
+           ========================================= */
+        .premium-btn-primary {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: #000;
+            font-weight: 700;
+            border: none;
+            border-radius: 16px;
+            padding: 18px 36px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow:
+                0 4px 20px rgba(245, 158, 11, 0.35),
+                0 0 0 1px rgba(251, 191, 36, 0.2);
+            font-size: 16px;
+            letter-spacing: 0.02em;
+        }
+
+        .premium-btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .premium-btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow:
+                0 8px 30px rgba(245, 158, 11, 0.45),
+                0 0 0 1px rgba(251, 191, 36, 0.3);
+        }
+
+        .premium-btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .premium-btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        .premium-btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* =========================================
+           COPY BUTTON
+           ========================================= */
+        .copy-btn {
+            background: rgba(245, 158, 11, 0.1);
+            color: #FBBF24;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 12px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(245, 158, 11, 0.2);
+            border-color: rgba(245, 158, 11, 0.5);
+            transform: translateY(-1px);
+        }
+
+        .copy-btn.copied {
+            background: rgba(34, 197, 94, 0.15);
+            color: #22C55E;
+            border-color: rgba(34, 197, 94, 0.4);
+        }
+
+        /* =========================================
+           IMAGE UPLOAD AREA - REFINED
+           ========================================= */
+        .upload-area {
+            border: 2px dashed rgba(245, 158, 11, 0.25);
+            border-radius: 20px;
+            background: rgba(12, 12, 16, 0.6);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .upload-area:hover {
+            border-color: rgba(245, 158, 11, 0.5);
+            background: rgba(245, 158, 11, 0.03);
+        }
+
+        .upload-area.dragover {
+            border-color: #F59E0B;
+            background: rgba(245, 158, 11, 0.08);
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.15);
+        }
+
+        /* =========================================
+           RESULT PANEL - REFINED
+           ========================================= */
+        .result-panel {
+            background: rgba(12, 12, 16, 0.95);
+            border: 1px solid rgba(245, 158, 11, 0.15);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        }
+
+        .result-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #FBBF24, #F59E0B, #D97706, #F59E0B, #FBBF24);
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        /* =========================================
+           SECTION TITLE - REFINED
+           ========================================= */
+        .section-title {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: #F59E0B;
+            font-size: 0.9rem;
+        }
+
+        /* =========================================
+           LABEL STYLE
+           ========================================= */
+        .input-label {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .input-label .required {
+            color: #F59E0B;
+            margin-left: 4px;
+        }
+
+        /* =========================================
+           BACK BUTTON
+           ========================================= */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-size: 14px;
+            font-weight: 500;
+            padding: 8px 0;
+        }
+
+        .back-btn:hover {
+            color: #FBBF24;
+            transform: translateX(-5px);
+        }
+
+        .back-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .back-btn:hover i {
+            transform: translateX(-3px);
+        }
+
+        /* =========================================
+           TOAST - REFINED
+           ========================================= */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            background: rgba(20, 20, 26, 0.98);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 16px;
+            padding: 18px 28px;
+            color: white;
+            font-weight: 600;
+            box-shadow:
+                0 12px 48px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(245, 158, 11, 0.1);
+            transform: translateY(120px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Container */
+        .main-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* =========================================
+           HEADER SUBTITLE
+           ========================================= */
+        .subtitle {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .subtitle span {
+            color: #FBBF24;
+            font-weight: 500;
+        }
+
+        /* =========================================
+           DIVIDER
+           ========================================= */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(245, 158, 11, 0.2), transparent);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen text-white antialiased">
+
+    <!-- Aurora Background -->
+    <div class="aurora-bg">
+        <div class="aurora-orb aurora-amber"></div>
+        <div class="aurora-orb aurora-orange"></div>
+        <div class="aurora-orb aurora-gold"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="main-container max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+
+        <!-- Back Link -->
+        <a href="../index.html" class="back-btn mb-10 inline-block">
+            <i class="fas fa-arrow-left"></i>
+            <span>AIMOTION YouTube</span>
+        </a>
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="neon-title text-3xl md:text-5xl font-black mb-4 tracking-tight">
+                유튜브 썸네일 프롬프트 생성기
+            </h1>
+            <p class="subtitle">
+                <span>NanoBanana PRO</span>용 AI 프롬프트를 쉽게 만들어보세요
+            </p>
+        </header>
+
+        <!-- Settings Section -->
+        <div class="premium-glass p-7 mb-6">
+            <div class="flex items-center justify-end mb-5">
+                <h2 class="section-title"><i class="fas fa-sliders-h"></i> 설정</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <!-- Ratio -->
+                <div>
+                    <label class="input-label">비율</label>
+                    <select id="ratioSelect" class="premium-select w-full">
+                        <option value="16:9">16:9 (유튜브 썸네일)</option>
+                        <option value="9:16">9:16 (세로/쇼츠)</option>
+                        <option value="1:1">1:1 (정방형)</option>
+                    </select>
+                </div>
+
+                <!-- Style -->
+                <div>
+                    <label class="input-label">Style</label>
+                    <select id="styleSelect" class="premium-select w-full">
+                        <option value="">기본 (None)</option>
+                        <option value="photorealistic, hyper-realistic, 8K quality">실사</option>
+                        <option value="anime style, japanese animation">애니메이션</option>
+                        <option value="3D render, octane render, cinema 4D">3D</option>
+                        <option value="cyberpunk, neon lights, futuristic">사이버펑크</option>
+                        <option value="watercolor painting, soft colors">수채화</option>
+                        <option value="vintage, retro, 70s 80s style">빈티지</option>
+                        <option value="illustration, digital art, vector style">일러스트</option>
+                        <option value="sketch, pencil drawing, hand-drawn">스케치</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Prompt Input Section -->
+        <div class="premium-glass p-7 mb-6">
+            <h2 class="section-title mb-5"><i class="fas fa-edit"></i> 프롬프트</h2>
+
+            <div class="space-y-5">
+                <!-- Concept -->
+                <div>
+                    <label class="input-label">컨셉 <span class="required">*</span></label>
+                    <input type="text" id="subjectInput" class="glow-input w-full px-5 py-4"
+                        placeholder="Ex. 맛있어 보이는 음식, 럭셔리한 스포츠카 등">
+                </div>
+
+                <!-- Required Text -->
+                <div>
+                    <label class="input-label">필수 문구</label>
+                    <input type="text" id="textInput" class="glow-input w-full px-5 py-4"
+                        placeholder="Ex. 댄스 챌린지, 2026년 역대급 상품출시 등">
+                </div>
+            </div>
+        </div>
+
+        <!-- Reference Image Section -->
+        <div class="premium-glass p-7 mb-8">
+            <h2 class="section-title mb-5"><i class="fas fa-image"></i> 레퍼런스 이미지</h2>
+
+            <div id="uploadArea" class="upload-area p-10 text-center">
+                <input type="file" id="imageInput" accept="image/*" class="hidden">
+                <div id="uploadPlaceholder">
+                    <i class="fas fa-cloud-upload-alt text-5xl text-amber-400 mb-4 opacity-60"></i>
+                    <p class="text-gray-400 font-medium">이미지를 드래그하거나 클릭하여 업로드</p>
+                    <p class="text-gray-600 text-sm mt-2">참고용 이미지를 업로드하면 프롬프트에 반영됩니다</p>
+                </div>
+                <div id="imagePreview" class="hidden">
+                    <img id="previewImg" class="max-h-52 mx-auto rounded-xl mb-4 shadow-lg">
+                    <button onclick="clearImage()"
+                        class="text-sm text-red-400 hover:text-red-300 font-medium transition-colors">
+                        <i class="fas fa-times mr-1"></i>이미지 제거
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generate Button -->
+        <button onclick="generatePrompt()" class="premium-btn-primary w-full text-lg mb-8" id="generateBtn">
+            <i class="fas fa-magic mr-2"></i>프롬프트 생성하기
+        </button>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="hidden">
+            <div class="result-panel p-7">
+                <div class="flex items-center justify-between mb-5">
+                    <h2 class="section-title"><i class="fas fa-clipboard-list"></i> 생성된 프롬프트</h2>
+                    <button onclick="copyPrompt()" class="copy-btn" id="copyBtn">
+                        <i class="fas fa-copy mr-2"></i>복사
+                    </button>
+                </div>
+                <div id="promptResult"
+                    class="bg-black/40 rounded-xl p-5 text-gray-300 leading-relaxed font-mono text-sm whitespace-pre-wrap border border-white/5">
+                    <!-- Generated prompt will appear here -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle mr-2 text-green-400"></i>
+        <span id="toastMessage">복사되었습니다!</span>
+    </div>
+
+    <script>
+        // =========================================
+        // ELEMENTS
+        // =========================================
+        const ratioSelect = document.getElementById('ratioSelect');
+        const styleSelect = document.getElementById('styleSelect');
+        const subjectInput = document.getElementById('subjectInput');
+        const textInput = document.getElementById('textInput');
+        const imageInput = document.getElementById('imageInput');
+        const uploadArea = document.getElementById('uploadArea');
+        const uploadPlaceholder = document.getElementById('uploadPlaceholder');
+        const imagePreview = document.getElementById('imagePreview');
+        const previewImg = document.getElementById('previewImg');
+        const resultSection = document.getElementById('resultSection');
+        const promptResult = document.getElementById('promptResult');
+        const copyBtn = document.getElementById('copyBtn');
+
+        let uploadedImage = null;
+
+        // =========================================
+        // IMAGE UPLOAD
+        // =========================================
+        uploadArea.addEventListener('click', () => imageInput.click());
+
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                handleImage(file);
+            }
+        });
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleImage(file);
+            }
+        });
+
+        function handleImage(file) {
+            uploadedImage = file;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                uploadPlaceholder.classList.add('hidden');
+                imagePreview.classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function clearImage() {
+            uploadedImage = null;
+            imageInput.value = '';
+            previewImg.src = '';
+            uploadPlaceholder.classList.remove('hidden');
+            imagePreview.classList.add('hidden');
+        }
+
+        // =========================================
+        // ADVANCED STYLE CONFIGURATIONS
+        // =========================================
+        const STYLE_CONFIG = {
+            '': {
+                name: 'Default',
+                keywords: '',
+                lighting: 'professional studio lighting, balanced exposure',
+                mood: 'clean and polished',
+                quality: 'high resolution, sharp focus, professional quality'
+            },
+            'photorealistic, hyper-realistic, 8K quality': {
+                name: 'Photorealistic',
+                keywords: 'photorealistic, hyper-realistic, ultra-detailed, 8K UHD resolution, DSLR quality',
+                lighting: 'natural lighting, golden hour glow, soft shadows, ray tracing, global illumination',
+                mood: 'lifelike authenticity, cinematic realism',
+                quality: 'extremely detailed textures, subsurface scattering, depth of field, bokeh background, HDR'
+            },
+            'anime style, japanese animation': {
+                name: 'Anime',
+                keywords: 'anime style, Japanese animation, vibrant cel-shading, clean lineart, manga inspired',
+                lighting: 'dramatic anime lighting, rim lighting, light rays, sparkle effects',
+                mood: 'dynamic and expressive, emotional intensity',
+                quality: 'smooth gradients, detailed character design, vivid saturated colors, studio quality animation'
+            },
+            '3D render, octane render, cinema 4D': {
+                name: '3D Render',
+                keywords: '3D render, Octane render, Cinema 4D, Blender, CGI, volumetric',
+                lighting: 'three-point lighting, volumetric fog, caustics, ambient occlusion, HDRI environment',
+                mood: 'modern and sleek, futuristic polish',
+                quality: 'physically based rendering, subsurface scattering, realistic materials, 8K textures, anti-aliasing'
+            },
+            'cyberpunk, neon lights, futuristic': {
+                name: 'Cyberpunk',
+                keywords: 'cyberpunk aesthetic, neon-noir, dystopian futurism, synthwave, tech-noir',
+                lighting: 'neon glow, pink and cyan neon lights, holographic reflections, lens flares, chromatic aberration',
+                mood: 'gritty futuristic, high-tech low-life, mysterious and edgy',
+                quality: 'ultra detailed, rain-slicked surfaces, reflective materials, glowing elements, atmospheric haze'
+            },
+            'watercolor painting, soft colors': {
+                name: 'Watercolor',
+                keywords: 'watercolor painting, traditional art, wet-on-wet technique, artistic brushstrokes',
+                lighting: 'soft diffused light, gentle highlights, organic shadows',
+                mood: 'dreamy and ethereal, gentle and artistic',
+                quality: 'visible paint texture, color bleeding effects, paper texture, delicate washes, fine art quality'
+            },
+            'vintage, retro, 70s 80s style': {
+                name: 'Vintage',
+                keywords: 'vintage aesthetic, retro 70s 80s style, nostalgic, film grain, analog',
+                lighting: 'warm vintage lighting, soft focus, lens vignette, light leaks',
+                mood: 'nostalgic and warm, timeless classic feel',
+                quality: 'film grain texture, faded colors, halftone dots, VHS aesthetic, polaroid tones'
+            },
+            'illustration, digital art, vector style': {
+                name: 'Illustration',
+                keywords: 'digital illustration, vector art style, graphic design, flat design elements',
+                lighting: 'stylized lighting, bold shadows, graphic contrast',
+                mood: 'modern and clean, visually striking',
+                quality: 'crisp vector edges, bold color palette, geometric shapes, professional graphic design'
+            },
+            'sketch, pencil drawing, hand-drawn': {
+                name: 'Sketch',
+                keywords: 'pencil sketch, hand-drawn art, charcoal drawing, traditional illustration',
+                lighting: 'crosshatching for shadows, white highlights, graphite shading',
+                mood: 'artistic and raw, personal and authentic',
+                quality: 'visible pencil strokes, paper texture, detailed linework, fine art sketch quality'
+            }
+        };
+
+        // =========================================
+        // RATIO CONFIGURATIONS
+        // =========================================
+        const RATIO_CONFIG = {
+            '16:9': {
+                composition: 'wide cinematic composition, rule of thirds, balanced horizontal layout',
+                focus: 'main subject positioned off-center for visual interest'
+            },
+            '9:16': {
+                composition: 'vertical mobile-first composition, stacked visual hierarchy',
+                focus: 'main subject centered vertically with clear top and bottom framing'
+            },
+            '1:1': {
+                composition: 'square symmetrical composition, centered focal point',
+                focus: 'subject prominently centered with balanced negative space'
+            }
+        };
+
+        // =========================================
+        // PROMPT GENERATION - ADVANCED ALGORITHM
+        // =========================================
+        function generatePrompt() {
+            const ratio = ratioSelect.value;
+            const styleKey = styleSelect.value;
+            const subject = subjectInput.value.trim();
+            const text = textInput.value.trim();
+            const hasReference = uploadedImage !== null;
+
+            if (!subject) {
+                showToast('컨셉을 입력해주세요!', 'error');
+                subjectInput.focus();
+                return;
+            }
+
+            // Get configurations
+            const styleConfig = STYLE_CONFIG[styleKey] || STYLE_CONFIG[''];
+            const ratioConfig = RATIO_CONFIG[ratio];
+
+            // Build advanced prompt
+            let prompt = '';
+
+            // === SECTION 1: Core Description ===
+            prompt += `[THUMBNAIL GENERATION]\n`;
+            prompt += `Create a stunning YouTube thumbnail image.\n\n`;
+
+            // === SECTION 2: Format & Composition ===
+            prompt += `[FORMAT]\n`;
+            prompt += `• Aspect Ratio: ${ratio}\n`;
+            prompt += `• Composition: ${ratioConfig.composition}\n`;
+            prompt += `• Focus: ${ratioConfig.focus}\n\n`;
+
+            // === SECTION 3: Visual Style ===
+            if (styleKey) {
+                prompt += `[VISUAL STYLE: ${styleConfig.name.toUpperCase()}]\n`;
+                prompt += `• Style: ${styleConfig.keywords}\n`;
+                prompt += `• Lighting: ${styleConfig.lighting}\n`;
+                prompt += `• Mood: ${styleConfig.mood}\n`;
+                prompt += `• Quality: ${styleConfig.quality}\n\n`;
+            }
+
+            // === SECTION 4: Main Concept ===
+            prompt += `[MAIN CONCEPT]\n`;
+            prompt += `${subject}\n\n`;
+
+            // === SECTION 5: Text Overlay ===
+            if (text) {
+                prompt += `[TEXT OVERLAY]\n`;
+                prompt += `• Text: "${text}"\n`;
+                prompt += `• Typography: Bold, impactful font with high readability\n`;
+                prompt += `• Placement: Prominently positioned, not obstructing main subject\n`;
+                prompt += `• Effects: Drop shadow or outline for contrast against background\n\n`;
+            }
+
+            // === SECTION 6: Reference Image Handling ===
+            if (hasReference) {
+                prompt += `[REFERENCE IMAGE GUIDANCE]\n`;
+                prompt += `• IMPORTANT: Analyze the uploaded reference image carefully\n`;
+                prompt += `• Match the color palette and overall mood of the reference\n`;
+                prompt += `• Follow similar composition and framing approach\n`;
+                prompt += `• Maintain consistent lighting style and atmosphere\n`;
+                prompt += `• Adapt the visual elements to match reference aesthetic\n\n`;
+            }
+
+            // === SECTION 7: Quality Enhancement ===
+            prompt += `[QUALITY REQUIREMENTS]\n`;
+            prompt += `• Resolution: Ultra high definition, crystal clear details\n`;
+            prompt += `• Colors: Vibrant, eye-catching, optimized for small thumbnail display\n`;
+            prompt += `• Contrast: High contrast for visibility at any size\n`;
+            prompt += `• Appeal: Click-worthy, attention-grabbing, scroll-stopping visual\n`;
+            prompt += `• Professional YouTube thumbnail quality\n`;
+
+            // === SECTION 8: Negative Prompt Suggestions ===
+            prompt += `\n[AVOID]\n`;
+            prompt += `• Blurry or low quality images\n`;
+            prompt += `• Cluttered or confusing compositions\n`;
+            prompt += `• Hard to read text\n`;
+            prompt += `• Boring or generic visuals`;
+
+            // Display result
+            promptResult.textContent = prompt;
+            resultSection.classList.remove('hidden');
+
+            // Scroll to result
+            setTimeout(() => {
+                resultSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 100);
+
+            showToast('고급 프롬프트가 생성되었습니다!', 'success');
+        }
+
+        // =========================================
+        // COPY FUNCTION
+        // =========================================
+        async function copyPrompt() {
+            const prompt = promptResult.textContent;
+
+            try {
+                await navigator.clipboard.writeText(prompt);
+                copyBtn.classList.add('copied');
+                copyBtn.innerHTML = '<i class="fas fa-check mr-2"></i>복사됨!';
+                showToast('클립보드에 복사되었습니다!', 'success');
+
+                setTimeout(() => {
+                    copyBtn.classList.remove('copied');
+                    copyBtn.innerHTML = '<i class="fas fa-copy mr-2"></i>복사';
+                }, 2000);
+            } catch (err) {
+                // Fallback
+                const textarea = document.createElement('textarea');
+                textarea.value = prompt;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast('클립보드에 복사되었습니다!', 'success');
+            }
+        }
+
+        // =========================================
+        // TOAST
+        // =========================================
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+
+            toastMessage.textContent = message;
+
+            if (type === 'error') {
+                toast.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+                toast.querySelector('i').className = 'fas fa-exclamation-circle mr-2 text-red-400';
+            } else {
+                toast.style.borderColor = 'rgba(245, 158, 11, 0.25)';
+                toast.querySelector('i').className = 'fas fa-check-circle mr-2 text-green-400';
+            }
+
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // =========================================
+        // LOAD SAVED SETTINGS
+        // =========================================
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem('thumbnail_settings');
+                if (saved) {
+                    const settings = JSON.parse(saved);
+                    if (settings.ratio) ratioSelect.value = settings.ratio;
+                    if (settings.style) styleSelect.value = settings.style;
+                }
+            } catch (e) { }
+        }
+
+        function saveSettings() {
+            try {
+                const settings = {
+                    ratio: ratioSelect.value,
+                    style: styleSelect.value
+                };
+                localStorage.setItem('thumbnail_settings', JSON.stringify(settings));
+            } catch (e) { }
+        }
+
+        // Save settings on change
+        ratioSelect.addEventListener('change', saveSettings);
+        styleSelect.addEventListener('change', saveSettings);
+
+        // Load on init
+        loadSettings();
+
+        // Enter key to generate
+        [subjectInput, textInput].forEach(input => {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    generatePrompt();
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
